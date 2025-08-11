@@ -1,0 +1,15 @@
+---
+import Default from '@astrojs/starlight/components/Hero.astro';
+---
+
+<Default {...Astro.props}>
+  <slot />
+</Default>
+
+<style>
+  :global([data-has-hero] .page) {
+    background:
+      radial-gradient(#292929, transparent 50%) no-repeat -60vw -50vh / 105vw 200vh,
+      radial-gradient(#292929, transparent 50%) no-repeat 30vw -100vh / 105vw 200vh;
+  }
+</style>

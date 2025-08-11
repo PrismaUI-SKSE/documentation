@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+:root {
+  --sl-color-accent-low: #545861;
+  --sl-color-accent: #c0c2c7;
+  --sl-color-accent-high: #ffffff;
+}
+
+.hero > img {
+  max-height: 400px;
+}
+
+.sl-banner {
+  background: transparent;
+}
+
+.sl-banner a {
+  text-decoration: underline;
+}
+
+.sl-markdown-content a {
+  text-decoration: underline;
+}
+
+.actions {
+  gap: 1rem;
+}
+
+.actions .primary {
+  background-color: transparent;
+}

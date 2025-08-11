@@ -1,0 +1,120 @@
+---
+title: Quick Start
+description: A guide in my new Starlight docs site.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+### Requirements
+<Steps>
+  1. Skyrim Special Edition (Supports SE and AE)
+  2. [Skyrim Script Extender (SKSE)](https://www.nexusmods.com/skyrimspecialedition/mods/30379)
+  3. [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444)
+  4. [Keyboard Shortcuts Fix](https://www.nexusmods.com/skyrimspecialedition/mods/3620) to enable keyboard input
+  5. Mostly recommended to use [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194)
+</Steps>
+
+### Installation
+<Steps>
+  1. [Download Prisma UI](https://github.com/PrismaUI-SKSE/PrismaUI-Wiki/releases)
+  2. Put all files from `PUT FILES IN SKYRIM FOLDER` folder to Skyrim folder
+  3. Install all archives from `INSTALL WITH MO2` folder with Mod Organizer 2
+  4. If you are a developer, then check `API HEADER FILE` folder, it contains C++ header API file which you can use in your SKSE Plugin (see [API Usage Example](#api-usage-example))
+</Steps>
+
+### API Usage Example
+
+This is a conceptual example to illustrate potential usage. We recommend to build upon our example plugin (https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin).
+
+```cpp
+#include "PrismaUI_API.h"
+
+// 1. Declare PrismaUI API variable.
+PRISMA_UI_API::IVPrismaUI1* PrismaUI;
+
+static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
+{
+    switch (message->type) {
+    case SKSE::MessagingInterface::kDataLoaded:
+        // 2. Initialize PrismaUI API
+        PrismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1));
+
+        // 3. Create view and call "Invoke" method to send JavaScript code to view when DOM is ready.
+        PrismaView view = PrismaUI->CreateView("PrismaUI-Example-UI/index.html", [](PrismaView view) -> void {
+            // View DOM is ready then you can use Invoke here (make sure that your JS methods are available after DOM is ready).
+            logger::info("View DOM is ready {}", view);
+
+            PrismaUI->Invoke(view, "updateFocusLabel('No. But press F3 to focus!')");
+        });
+
+        // 4. Also you can register JS listeners to handling JS methods calls.
+        PrismaUI->RegisterJSListener(view, "sendDataToSKSE", [](std::string data) -> void {
+            logger::info("Received data from JS: {}", data);
+        });
+
+        // ...
+
+        break;
+    }
+}
+```
+HTML file of your view:
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your View</title>
+    <style>
+        * {
+            user-select: none;
+            font-family: sans-serif;
+        }
+
+        .wrapper {
+            display: inline-block;
+            padding: 8px;
+            background-color: white;
+            border-radius: 8px;
+        }
+        
+        #focus-label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div>
+            <span>Is focused:</span>
+            <span id="focus-label"></span>
+        </div>
+        <div>
+            <div>
+                <input id="data-input" type="text" placeholder="Type some data..." />
+                <button onclick="sendInputData()">Send Data to SKSE</button>
+            </div>
+            <span id="data-sent-label" style="display: none;">Data was successfully sent, check your plugin log file!</span>
+        </div>
+    </div>
+
+    <script>
+        // Global function which we're going to trigger from SKSE plugin with Invoke().
+        window.updateFocusLabel = (data) => {
+            document.querySelector("#focus-label").textContent = data;
+        };
+
+        function sendInputData() {
+            const inputValue = document.querySelector("#data-input").value;
+
+            document.querySelector("#data-sent-label").style.display = 'inline';
+
+            // Sending data to SKSE plugin with registered "sendDataToSKSE" JS listener.
+            window.sendDataToSKSE(inputValue);
+        }
+    </script>
+</body>
+</html>
+```
+See [API Documentation](https://github.com/PrismaUI-SKSE/PrismaUI-Wiki/wiki/2.-API) to explore all available methods.
