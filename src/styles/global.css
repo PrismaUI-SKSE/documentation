@@ -7,7 +7,15 @@
 }
 
 .hero > img {
-  max-height: 400px;
+  max-height: 460px;
+}
+
+.hero h1 {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(146, 146, 146, 1) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 80px rgba(0, 0, 0, 0.4);
 }
 
 .sl-banner {
