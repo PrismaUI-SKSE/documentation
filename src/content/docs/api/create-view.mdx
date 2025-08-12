@@ -1,0 +1,139 @@
+---
+title: CreateView
+description: Creates a PrismaView by loading an HTML file for game UI integration
+sidebar:
+  order: 1
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Creates a `PrismaView` instance by loading an HTML file. This is the primary method for initializing UI components in your SKSE plugin.
+
+<Aside type="caution" title="Important">
+Create only **one instance** of `PrismaView` per plugin. Manage multiple interfaces through your web application (HTML/CSS/JS). A single instance is sufficient for all game interfaces, which you must manage yourself via JavaScript. The multi-view system is intended for integrating different `PrismaView` instances from various developers.
+</Aside>
+
+## Syntax
+
+```cpp
+PrismaView CreateView(
+    const char* htmlPath, 
+    OnDomReadyCallback onDomReadyCallback = nullptr
+);
+```
+
+## Parameters
+
+### `htmlPath` (required)
+- **Type:** `const char*`
+- **Description:** The path to the HTML file that will be loaded into the `PrismaView`
+- **Base Directory:** `Skyrim/Data/PrismaUI/views/`
+
+### `onDomReadyCallback` (optional)
+- **Type:** `OnDomReadyCallback`
+- **Default:** `nullptr`
+- **Description:** An optional callback function that will be invoked when the DOM of this `PrismaView` is fully loaded
+- **Parameters:** Takes a single argument - the `PrismaView` instance
+
+## Return Value
+
+Returns a `PrismaView` instance representing the created UI component.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Simple view creation without callback
+PrismaView view = PrismaUI->CreateView("MyPlugin/index.html");
+```
+
+</TabItem>
+<TabItem label="With DOM Ready Callback">
+
+```cpp
+// View creation with DOM ready callback
+PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+    // The callback is executed after the DOM tree is fully initialized
+    logger::info("View DOM is ready {}", view);
+    
+    // You can now safely invoke JavaScript methods
+    PrismaUI->Invoke(view, "initializeUI()");
+});
+```
+
+</TabItem>
+<TabItem label="Complete Integration">
+
+```cpp
+#include "PrismaUI_API.h"
+
+PRISMA_UI_API::IVPrismaUI1* PrismaUI;
+
+static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
+{
+    switch (message->type) {
+    case SKSE::MessagingInterface::kDataLoaded:
+        // Initialize PrismaUI API
+        PrismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(
+            PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1)
+        );
+
+        // Create view with comprehensive setup
+        PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+            logger::info("View DOM is ready {}", view);
+            
+            // Initialize UI state
+            PrismaUI->Invoke(view, "setPlayerName('" + GetPlayerName() + "')");
+            PrismaUI->Invoke(view, "updateHealthBar(" + std::to_string(GetPlayerHealth()).c_str() + ")");
+        });
+
+        // Register JavaScript event listeners
+        PrismaUI->RegisterJSListener(view, "onButtonClick", [](const char* data) -> void {
+            logger::info("Button clicked with data: {}", data);
+        });
+
+        break;
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## File Structure
+
+Your HTML file should be placed in the following directory structure:
+
+```
+Skyrim/
+└── Data/
+    └── PrismaUI/
+        └── views/
+            └── MyPlugin/
+                ├── index.html
+                ├── styles.css
+                └── script.js
+```
+
+## Best Practices
+
+<Aside type="tip" title="Performance Tip">
+Use the `onDomReadyCallback` to ensure your JavaScript code executes only after the DOM is fully loaded. This prevents errors when trying to access DOM elements that haven't been created yet.
+</Aside>
+
+- **Single Instance:** Always create only one `PrismaView` per plugin
+- **DOM Ready:** Use the callback to initialize your UI state safely
+- **View Management:** Store the returned `PrismaView` instance for later use with other API methods
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If your view doesn't load properly, check:
+- The HTML file path is correct relative to `Skyrim/Data/PrismaUI/views/`
+- The HTML file has proper syntax and structure
+- Required dependencies are loaded before calling `CreateView`
+</Aside>

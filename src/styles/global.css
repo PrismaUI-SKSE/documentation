@@ -1,5 +1,14 @@
 @import 'tailwindcss';
 
+@layer base {
+  ul,
+  ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+}
+
 :root {
   --sl-color-accent-low: #545861;
   --sl-color-accent: #c0c2c7;
@@ -35,4 +44,8 @@
 
 .actions .primary {
   background-color: transparent;
+}
+
+[role='tablist'] a {
+  text-decoration: none;
 }

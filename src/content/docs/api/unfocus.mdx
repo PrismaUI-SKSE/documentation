@@ -1,0 +1,65 @@
+---
+title: Unfocus
+description: Removes input focus from the specified PrismaView and hides the cursor
+sidebar:
+  order: 6
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Removes input focus from the specified `PrismaView` and hides the cursor. This method deactivates the UI and returns control to the game, automatically resuming the game if it was previously paused by the `Focus` method.
+
+<Aside type="tip" title="Automatic Game Resume">
+When you call `Unfocus`, the game will automatically resume if it was paused by a previous `Focus` call with `pauseGame = true`.
+</Aside>
+
+## Syntax
+
+```cpp
+void Unfocus(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` from which to remove focus
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Unfocus">
+
+```cpp
+// Simple unfocus operation
+PrismaUI->Unfocus(view);
+logger::info("View unfocused - control returned to game");
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Clean State Management">
+Always unfocus views when closing menus or dialogs to ensure proper game state management and prevent input conflicts.
+</Aside>
+
+- **Paired Operations:** Always pair `Focus` and `Unfocus` calls appropriately
+- **Input Management:** Use `Unfocus` to return game input control to the player
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If unfocus behavior seems incorrect:
+- Ensure the `PrismaView` is valid and currently focused
+- Check that your UI properly handles the focus state change
+- Verify that game input is being restored correctly after unfocus
+- Make sure no other views are interfering with focus management
+</Aside>

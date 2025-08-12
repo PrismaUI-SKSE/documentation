@@ -1,0 +1,56 @@
+---
+title: Destroy
+description: Completely removes a PrismaView from memory and unfocuses it
+sidebar:
+  order: 10
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Completely removes a `PrismaView` from memory and unfocuses it. This method performs a complete cleanup of the view, freeing all associated resources and ensuring proper memory management.
+
+<Aside type="caution" title="Irreversible Operation">
+`Destroy` is an irreversible operation. Once a view is destroyed, it cannot be used again and you must create a new view if needed.
+</Aside>
+
+## Syntax
+
+```cpp
+void Destroy(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to remove from memory
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic View Destruction">
+
+```cpp
+// Simple view destruction
+PrismaUI->Destroy(view);
+logger::info("View destroyed and memory freed");
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Memory Management">
+Always destroy views when your plugin shuts down or when views are no longer needed to prevent memory leaks and ensure clean resource management.
+</Aside>
+
+- **Cleanup on Exit:** Always destroy views during plugin shutdown
+- **Validity Check:** Use `IsValid` before destroying to avoid unnecessary operations
+- **Resource Management:** Destroy views when they're no longer needed to free memory

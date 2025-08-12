@@ -1,0 +1,65 @@
+---
+title: Installation
+sidebar:
+  order: 2
+---
+
+import { Steps, Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
+
+### Requirements
+
+<Steps>
+  1. Skyrim Special Edition (Supports SE and AE)
+  2. [Skyrim Script Extender (SKSE)](https://www.nexusmods.com/skyrimspecialedition/mods/30379)
+  3. [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444)
+  4. [Keyboard Shortcuts Fix](https://www.nexusmods.com/skyrimspecialedition/mods/3620) to enable keyboard input
+  5. Mostly recommended to use [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194)
+</Steps>
+
+### Installation
+
+<Steps>
+  1. [Download Prisma UI](https://github.com/PrismaUI-SKSE/PrismaUI-Wiki/releases)
+  2. Put all files from `PUT FILES IN SKYRIM FOLDER` folder to Skyrim folder
+  3. Install all archives from `INSTALL WITH MO2` folder with Mod Organizer 2
+  4. If you are a developer, then check `API HEADER FILE` folder, it contains C++ header API file which you can use in your SKSE Plugin (see [Basic Usage](/getting-started/basic-usage/))
+</Steps>
+
+### Log File Locations
+
+If you encounter issues, check these log files for error messages:
+
+- **SKSE Log:** `Documents\My Games\Skyrim Special Edition\SKSE\PrismaUI.log`
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard
+    title="🚀 Basic Usage"
+    description="Learn how to create your first Prisma UI interface"
+    href="/getting-started/basic-usage/"
+  />
+  <LinkCard
+    title="🎮 Example Plugin"
+    description="Download a complete working example to get started"
+    href="https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin"
+  />
+  <LinkCard
+    title="📚 API Documentation"
+    description="Explore the complete API reference"
+    href="/api/create-view/"
+  />
+  <LinkCard
+    title="⚙️ Configuration"
+    description="Learn about advanced configuration options"
+    href="/configuration/focus-managements/"
+  />
+</CardGrid>
+
+<Aside type="tip" title="Need Help?">
+If you encounter any issues during installation, check our [GitHub Issues](https://github.com/PrismaUI-SKSE/PrismaUI-Wiki/issues) page.
+</Aside>
+
+---
+
+Once you have Prisma UI installed successfully, you're ready to start creating modern web-based user interfaces for Skyrim! 🎉

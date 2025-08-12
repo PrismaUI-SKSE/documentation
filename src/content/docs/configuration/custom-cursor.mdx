@@ -1,0 +1,37 @@
+---
+title: Custom Cursor
+description: Configure and customize the cursor appearance in PrismaUI
+sidebar:
+  order: 1
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+PrismaUI allows you to customize the cursor appearance by replacing the default cursor with your own `PNG` image. This enables you to create a consistent visual experience that matches your mod's theme and style.
+
+<Aside type="tip" title="Design Consistency">
+Use a cursor design that matches your UI theme and provides good visibility across different backgrounds and lighting conditions in Skyrim.
+</Aside>
+
+## File Requirements
+
+### Location
+Place your custom cursor file at:
+```
+Skyrim/Data/PrismaUI/misc/cursor.png
+```
+
+Or in your Mod Organizer 2 plugin:
+```
+MyPlugin/
+  └── PrismaUI/
+        └── misc/
+            └── cursor.png  ← Your custom cursor file
+```
+
+Simply place your `cursor.png` file in the specified directory. PrismaUI will automatically use your custom cursor when any `PrismaView` has focus.
+
+### Format
+File format is `PNG`.

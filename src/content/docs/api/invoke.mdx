@@ -1,0 +1,152 @@
+---
+title: Invoke
+description: Executes JavaScript code within a PrismaView for dynamic UI interaction
+sidebar:
+  order: 2
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Executes JavaScript code within the specified `PrismaView`. This method enables dynamic communication between your SKSE plugin and the web-based UI, allowing you to update the interface, call JavaScript functions, and retrieve data from the DOM.
+
+<Aside type="caution" title="Important">
+This method is only available **after** the `PrismaView`'s DOM tree has been initialized. Use the `onDomReadyCallback` in `CreateView` to ensure the DOM is ready before calling `Invoke`.
+</Aside>
+
+## Syntax
+
+```cpp
+void Invoke(
+    PrismaView view, 
+    const char* script, 
+    JSCallback callback = nullptr
+);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` instance in which the script will be executed
+
+### `script` (required)
+- **Type:** `const char*`
+- **Description:** A string containing the JavaScript code to execute
+- **Examples:** Function calls, variable assignments, DOM manipulations
+
+### `callback` (optional)
+- **Type:** `JSCallback`
+- **Default:** `nullptr`
+- **Description:** An optional callback function that will be invoked with the script's execution result
+- **Parameters:** Takes a single argument - the data returned from JavaScript as a string
+
+## Return Value
+
+This method returns `void`. Use the optional callback parameter to receive return values from JavaScript.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic JavaScript Execution">
+
+```cpp
+// Simple JavaScript execution without return value
+PrismaUI->Invoke(view, "setBodyBackgroundColor('red')");
+```
+
+```js
+// Corresponding JavaScript function
+window.setBodyBackgroundColor = (color) => {
+    document.body.style.backgroundColor = color;
+};
+```
+
+</TabItem>
+<TabItem label="With Return Value">
+
+```cpp
+// JavaScript execution with callback to receive return value
+static void OnReceiveBackgroundColor(const char* data) {
+    logger::info("Current background color: {}", data);
+}
+
+PrismaUI->Invoke(view, "getBodyBackgroundColor()", OnReceiveBackgroundColor);
+```
+
+```js
+// JavaScript function that returns a value
+window.getBodyBackgroundColor = () => {
+    return document.body.style.backgroundColor;
+};
+```
+
+</TabItem>
+</Tabs>
+
+### JSON Format Example
+
+You can use the [nlohmann/json](https://github.com/nlohmann/json) library to easily send structured data from C++ to your web UI:
+
+<Tabs>
+<TabItem label="Simple JSON Example">
+
+```cpp
+#include <nlohmann/json.hpp>
+using JSON = nlohmann::json;
+
+void SendPlayerData() {
+    // Create JSON object with player information
+    JSON playerData = {
+        {"name", "Dragonborn"},
+        {"level", 25},
+        {"health", 100},
+        {"magicka", 150}
+    };
+
+    // Send JSON to JavaScript
+    std::string script = "updatePlayerInfo(" + playerData.dump() + ")";
+    PrismaUI->Invoke(view, script.c_str());
+}
+```
+
+```js
+// JavaScript function to handle the JSON data
+window.updatePlayerInfo = (data) => {
+    const playerData = JSON.parse(data);
+
+    document.getElementById('player-name').textContent = playerData.name;
+    document.getElementById('player-level').textContent = playerData.level;
+    document.getElementById('health-value').textContent = playerData.health;
+    document.getElementById('magicka-value').textContent = playerData.magicka;
+};
+```
+
+</TabItem>
+</Tabs>
+
+<Aside type="tip" title="JSON Benefits">
+Using JSON provides type safety, easy serialization, and makes your data structure clear and maintainable. The [nlohmann/json](https://github.com/nlohmann/json) library automatically handles proper escaping and formatting.
+</Aside>
+
+## Best Practices
+
+<Aside type="tip" title="Performance Tip">
+Batch multiple UI updates when possible instead of calling `Invoke` multiple times in rapid succession. This reduces overhead and improves performance.
+</Aside>
+
+- **DOM Ready:** Always ensure the DOM is ready before calling `Invoke`
+- **String Escaping:** Properly escape quotes and special characters in JavaScript strings
+- **Return Values:** Use callbacks for JavaScript functions that return data
+- **Performance:** Minimize frequent `Invoke` calls during game loops
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If `Invoke` doesn't work as expected, check:
+- The DOM is fully loaded (use `onDomReadyCallback`)
+- JavaScript function names are spelled correctly
+- Quotes and special characters are properly escaped
+- The `PrismaView` instance is valid and not destroyed
+</Aside>

@@ -1,0 +1,589 @@
+---
+title: Basic Usage
+sidebar:
+  order: 3
+---
+
+import { Aside, Code, Tabs, TabItem, Steps, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+# Getting Started with Prisma UI
+
+This guide walks you through creating your first Prisma UI interface, from setting up the C++ plugin code to building an interactive web UI that communicates with Skyrim.
+
+<Aside type="tip" title="Complete Example Available">
+For a fully working example, check out our [example plugin repository](https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin) which demonstrates all the concepts covered in this guide.
+</Aside>
+
+## Overview
+
+Creating a Prisma UI interface involves three main steps:
+
+<Steps>
+1. **Initialize the API** in your SKSE plugin
+2. **Create a PrismaView** that loads your HTML file
+3. **Set up bidirectional communication** between C++ and JavaScript
+</Steps>
+
+## Step 1: Plugin Setup
+
+First, set up the basic structure in your SKSE plugin to initialize Prisma UI:
+
+<Tabs>
+<TabItem label="Header Setup">
+
+```cpp
+#include "PrismaUI_API.h"
+
+// Declare the global PrismaUI API variable
+PRISMA_UI_API::IVPrismaUI1* PrismaUI = nullptr;
+```
+
+</TabItem>
+<TabItem label="Message Handler">
+
+```cpp
+static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
+{
+    switch (message->type) {
+    case SKSE::MessagingInterface::kDataLoaded:
+        // Initialize PrismaUI API when game data is loaded
+        PrismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(
+            PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1)
+        );
+
+        if (!PrismaUI) {
+            logger::error("Failed to initialize PrismaUI API");
+            return;
+        }
+
+        logger::info("PrismaUI API initialized successfully");
+        
+        // Initialize your UI here
+        InitializeUI();
+        break;
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Plugin Entry Point">
+
+```cpp
+SKSEPluginLoad(const SKSE::LoadInterface* skse) {
+    // ... other plugin initialization code ...
+
+    // Register for SKSE messages
+    auto messaging = SKSE::GetMessagingInterface();
+    if (!messaging->RegisterListener("SKSE", SKSEMessageHandler)) {
+        logger::error("Failed to register message listener");
+        return false;
+    }
+
+    return true;
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Step 2: Create Your First View
+
+Now let's create a PrismaView and set up the communication:
+
+```cpp
+void InitializeUI() {
+    // Create a view with DOM ready callback
+    PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+        logger::info("View DOM is ready {}", view);
+
+        // Initialize the UI with game data
+        PrismaUI->Invoke(view, "updatePlayerStatus('Ready for adventure!')");
+        
+        // Send initial game state
+        PrismaUI->Invoke(view, "setPlayerLevel(25)");
+        PrismaUI->Invoke(view, "setPlayerHealth(100)");
+    });
+
+    // Register JavaScript event listeners
+    PrismaUI->RegisterJSListener(view, "onPlayerAction", [](const char* data) -> void {
+        logger::info("Player action received: {}", data);
+        
+        std::string action = data;
+        if (action == "heal") {
+            // Implement healing logic
+            logger::info("Healing player...");
+        } else if (action == "save_game") {
+            // Implement save game logic
+            logger::info("Saving game...");
+        }
+    });
+
+    PrismaUI->RegisterJSListener(view, "requestPlayerData", [](const char* data) -> void {
+        // Send updated player data back to UI
+        PrismaUI->Invoke(view, "updatePlayerData({health: 85, magicka: 120, stamina: 95})");
+    });
+}
+```
+
+## Step 3: Create the HTML Interface
+
+Create your HTML file at `Skyrim/Data/PrismaUI/views/MyPlugin/index.html`:
+
+<Tabs>
+<TabItem label="HTML Structure">
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Skyrim UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="ui-container">
+        <header class="ui-header">
+            <h1>Player Interface</h1>
+            <div id="status" class="status">Initializing...</div>
+        </header>
+
+        <main class="ui-main">
+            <section class="player-stats">
+                <h2>Player Stats</h2>
+                <div class="stat-item">
+                    <label>Level:</label>
+                    <span id="player-level">--</span>
+                </div>
+                <div class="stat-item">
+                    <label>Health:</label>
+                    <span id="player-health">--</span>
+                </div>
+                <div class="stat-item">
+                    <label>Magicka:</label>
+                    <span id="player-magicka">--</span>
+                </div>
+                <div class="stat-item">
+                    <label>Stamina:</label>
+                    <span id="player-stamina">--</span>
+                </div>
+            </section>
+
+            <section class="actions">
+                <h2>Actions</h2>
+                <button onclick="performAction('heal')" class="action-btn heal-btn">
+                    Heal Player
+                </button>
+                <button onclick="performAction('save_game')" class="action-btn save-btn">
+                    Save Game
+                </button>
+                <button onclick="refreshData()" class="action-btn refresh-btn">
+                    Refresh Data
+                </button>
+            </section>
+
+            <section class="communication-test">
+                <h2>Communication Test</h2>
+                <input type="text" id="test-input" placeholder="Enter test data...">
+                <button onclick="sendTestData()" class="action-btn">Send to SKSE</button>
+                <div id="response-area" class="response-area"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+</TabItem>
+<TabItem label="CSS Styling">
+
+```css
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.ui-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ui-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ui-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.status {
+    font-size: 1.1rem;
+    color: #a0a0a0;
+}
+
+.ui-main {
+    display: grid;
+    gap: 24px;
+}
+
+section {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+section h2 {
+    margin-bottom: 16px;
+    color: #ffd700;
+    font-size: 1.4rem;
+}
+
+.player-stats {
+    display: grid;
+    gap: 12px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.stat-item label {
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+.stat-item span {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.heal-btn {
+    background: linear-gradient(45deg, #56ab2f 0%, #a8e6cf 100%);
+}
+
+.save-btn {
+    background: linear-gradient(45deg, #ff6b6b 0%, #ffa8a8 100%);
+}
+
+.refresh-btn {
+    background: linear-gradient(45deg, #4ecdc4 0%, #44a08d 100%);
+}
+
+.communication-test {
+    display: grid;
+    gap: 12px;
+}
+
+#test-input {
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+}
+
+#test-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.response-area {
+    min-height: 60px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #a0a0a0;
+}
+```
+
+</TabItem>
+<TabItem label="JavaScript Logic">
+
+```js
+// script.js
+
+// Functions called by C++ (Invoke)
+window.updatePlayerStatus = (status) => {
+    document.getElementById('status').textContent = status;
+};
+
+window.setPlayerLevel = (level) => {
+    document.getElementById('player-level').textContent = level;
+};
+
+window.setPlayerHealth = (health) => {
+    document.getElementById('player-health').textContent = health;
+};
+
+window.updatePlayerData = (dataString) => {
+    try {
+        const data = JSON.parse(dataString);
+        
+        if (data.health !== undefined) {
+            document.getElementById('player-health').textContent = data.health;
+        }
+        if (data.magicka !== undefined) {
+            document.getElementById('player-magicka').textContent = data.magicka;
+        }
+        if (data.stamina !== undefined) {
+            document.getElementById('player-stamina').textContent = data.stamina;
+        }
+        
+        addResponse('Player data updated successfully');
+    } catch (error) {
+        addResponse('Error parsing player data: ' + error.message);
+    }
+};
+
+// Functions that call C++ (RegisterJSListener)
+function performAction(action) {
+    window.onPlayerAction(action);
+    addResponse(`Action sent: ${action}`);
+}
+
+function refreshData() {
+    window.requestPlayerData('refresh');
+    addResponse('Data refresh requested');
+}
+
+function sendTestData() {
+    const input = document.getElementById('test-input');
+    const data = input.value.trim();
+    
+    if (data) {
+        window.onPlayerAction(`test:${data}`);
+        addResponse(`Test data sent: ${data}`);
+        input.value = '';
+    }
+}
+
+// Utility functions
+function addResponse(message) {
+    const responseArea = document.getElementById('response-area');
+    const timestamp = new Date().toLocaleTimeString();
+    responseArea.innerHTML += `[${timestamp}] ${message}<br>`;
+    responseArea.scrollTop = responseArea.scrollHeight;
+}
+
+// Initialize UI when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    addResponse('UI initialized and ready for communication');
+});
+```
+
+</TabItem>
+</Tabs>
+
+## File Structure
+
+Your project should be organized like this:
+
+```
+Skyrim/Data/PrismaUI/views/MyPlugin/
+├── index.html          # Main HTML file
+├── styles.css          # CSS styling
+└── script.js           # JavaScript logic
+```
+
+<Aside type="note" title="File Organization">
+Keep your HTML, CSS, and JavaScript in separate files for better maintainability. You can also use modern build tools and frameworks if desired.
+</Aside>
+
+## Advanced Communication Patterns
+
+### JSON Data Exchange
+
+For complex data structures, use JSON for reliable serialization:
+
+<Tabs>
+<TabItem label="C++ to JavaScript">
+
+```cpp
+#include <nlohmann/json.hpp>
+using JSON = nlohmann::json;
+
+void SendComplexData() {
+    JSON playerData = {
+        {"name", "Dragonborn"},
+        {"level", 25},
+        {"stats", {
+            {"health", 100},
+            {"magicka", 150},
+            {"stamina", 120}
+        }},
+        {"skills", {
+            {"oneHanded", 75},
+            {"destruction", 60},
+            {"restoration", 45}
+        }}
+    };
+
+    std::string script = "updateComplexData('" + playerData.dump() + "')";
+    PrismaUI->Invoke(view, script.c_str());
+}
+```
+
+</TabItem>
+<TabItem label="JavaScript to C++">
+
+```js
+function sendComplexData() {
+    const data = {
+        action: "updateSettings",
+        settings: {
+            difficulty: "expert",
+            enableMods: true,
+            graphics: {
+                quality: "high",
+                vsync: true
+            }
+        }
+    };
+
+    window.onPlayerAction(JSON.stringify(data));
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Return Values from JavaScript
+
+Use callbacks to get return values from JavaScript functions:
+
+```cpp
+// C++ - Request data with callback
+PrismaUI->Invoke(view, "getCurrentSettings()", [](const char* data) -> void {
+    logger::info("Current settings: {}", data);
+    
+    // Parse and use the returned data
+    try {
+        JSON settings = JSON::parse(data);
+        bool vsync = settings["vsync"];
+        // Apply settings...
+    } catch (const std::exception& e) {
+        logger::error("Failed to parse settings: {}", e.what());
+    }
+});
+```
+
+```js
+// JavaScript - Return data
+window.getCurrentSettings = () => {
+    return JSON.stringify({
+        vsync: true,
+        quality: "high",
+        difficulty: "expert"
+    });
+};
+```
+
+## Best Practices
+
+<CardGrid>
+  <Card title="Error Handling" icon="warning">
+    Always validate data received from JavaScript and handle parsing errors gracefully in your C++ code.
+  </Card>
+  
+  <Card title="Performance" icon="rocket">
+    Batch UI updates when possible instead of calling `Invoke` multiple times in rapid succession.
+  </Card>
+  
+  <Card title="DOM Ready" icon="approve-check">
+    Use the `onDomReadyCallback` to ensure your JavaScript functions are available before calling them.
+  </Card>
+  
+  <Card title="Single View" icon="setting">
+    Create only one `PrismaView` per plugin. Manage multiple interfaces through your web application.
+  </Card>
+</CardGrid>
+
+## Next Steps
+
+Now that you have a basic understanding of Prisma UI, explore these resources:
+
+<CardGrid>
+  <LinkCard
+    title="📚 API Reference"
+    description="Detailed documentation for all Prisma UI methods"
+    href="/api/create-view/"
+  />
+  <LinkCard
+    title="⚙️ Configuration"
+    description="Learn about focus management and custom cursors"
+    href="/configuration/focus-managements/"
+  />
+  <LinkCard
+    title="🎮 Example Plugin"
+    description="Complete working example with advanced features"
+    href="https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin"
+  />
+  <LinkCard
+    title="🚫 Limitations"
+    description="Understand current limitations and workarounds"
+    href="/getting-started/limitations/"
+  />
+</CardGrid>
+
+<Aside type="tip" title="Development Workflow">
+You can develop and test your HTML/CSS/JavaScript directly in a web browser before integrating with Skyrim. This makes the development process much faster and easier to debug.
+</Aside>

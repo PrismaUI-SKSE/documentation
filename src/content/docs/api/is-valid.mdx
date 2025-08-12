@@ -1,0 +1,62 @@
+---
+title: IsValid
+description: Checks if a PrismaView instance is valid and not destroyed
+sidebar:
+  order: 9
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Checks if a `PrismaView` instance is valid. This method is essential for ensuring that a view has not been destroyed before attempting to perform operations on it, preventing crashes and undefined behavior.
+
+<Aside type="caution" title="Safety Check">
+Always use `IsValid` before performing operations on a `PrismaView` that might have been destroyed or invalidated, especially in asynchronous or event-driven code.
+</Aside>
+
+## Syntax
+
+```cpp
+bool IsValid(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to check for validity
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if the `PrismaView` is valid (e.g., it has not been destroyed); otherwise, `false`
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Validity Check">
+
+```cpp
+// Simple validity check before operation
+if (PrismaUI->IsValid(view)) {
+    PrismaUI->Invoke(view, "updateUI()");
+    logger::info("View is valid - operation performed");
+} else {
+    logger::warn("View is invalid - operation skipped");
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Defensive Programming">
+Use `IsValid` checks as a defensive programming practice, especially in complex applications where view lifecycle management might be distributed across multiple systems.
+</Aside>
+
+- **Pre-Operation Checks:** Always validate views before performing operations
+- **Error Handling:** Provide appropriate error handling for invalid views
+- **Lifecycle Tracking:** Use validity checks to track view lifecycle states
+- **Debugging Aid:** Use validity checks to identify view management issues

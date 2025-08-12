@@ -1,0 +1,155 @@
+---
+title: RegisterJSListener
+description: Registers a C++ function as an event handler for JavaScript events within a PrismaView
+sidebar:
+  order: 3
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Registers a C++ function as an event handler for a JavaScript event within a `PrismaView`. This method enables bidirectional communication between your web UI and SKSE plugin, allowing JavaScript to call C++ functions and pass data back to the game.
+
+<Aside type="tip" title="Bidirectional Communication">
+While `Invoke` allows C++ to call JavaScript, `RegisterJSListener` enables JavaScript to call C++ functions, creating a complete communication bridge between your plugin and web UI.
+</Aside>
+
+## Syntax
+
+```cpp
+void RegisterJSListener(
+    PrismaView view, 
+    const char* functionName, 
+    JSListenerCallback callback
+);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` instance in which the handler is registered
+
+### `functionName` (required)
+- **Type:** `const char*`
+- **Description:** The name of the JavaScript function to which the C++ function will be bound
+- **Note:** This becomes a global function accessible via `window.functionName`
+
+### `callback` (required)
+- **Type:** `JSListenerCallback`
+- **Description:** The C++ callback function that will be executed when the corresponding JavaScript function is called
+- **Parameters:** The callback's string argument will contain the data passed from JavaScript
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Event Handler">
+
+```cpp
+// Register a simple event handler
+PrismaUI->RegisterJSListener(view, "sendDataToSKSE", [](const char* data) -> void {
+    logger::info("Received data from JS: {}", data);
+});
+```
+
+```js
+// JavaScript - call the registered function
+window.sendDataToSKSE("Hello from JavaScript!");
+```
+
+</TabItem>
+<TabItem label="Player Action Handler">
+
+```cpp
+// Register handler for player actions
+PrismaUI->RegisterJSListener(view, "onPlayerAction", [](const char* data) -> void {
+    std::string action = data;
+    
+    if (action == "heal") {
+        RestorePlayerHealth();
+    } else if (action == "cast_spell") {
+        CastPlayerSpell();
+    }
+    
+    logger::info("Player action executed: {}", data);
+});
+```
+
+```js
+// JavaScript - trigger player actions
+document.getElementById('heal-button').addEventListener('click', () => {
+    window.onPlayerAction("heal");
+});
+
+document.getElementById('spell-button').addEventListener('click', () => {
+    window.onPlayerAction("cast_spell");
+});
+```
+
+</TabItem>
+<TabItem label="JSON Data Exchange">
+
+```cpp
+#include <nlohmann/json.hpp>
+using JSON = nlohmann::json;
+
+// Register handler for complex data
+PrismaUI->RegisterJSListener(view, "updateSettings", [](const char* data) -> void {
+    try {
+        JSON settings = JSON::parse(data);
+        
+        bool enableSound = settings["enableSound"];
+        int volume = settings["volume"];
+        std::string theme = settings["theme"];
+        
+        // Apply settings to game
+        SetSoundEnabled(enableSound);
+        SetVolume(volume);
+        SetTheme(theme);
+        
+        logger::info("Settings updated successfully");
+    } catch (const std::exception& e) {
+        logger::error("Failed to parse settings: {}", e.what());
+    }
+});
+```
+
+```js
+// JavaScript - send complex data as JSON
+const settings = {
+    enableSound: true,
+    volume: 75,
+    theme: "dark"
+};
+
+window.updateSettings(JSON.stringify(settings));
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Error Handling">
+Always validate and sanitize data received from JavaScript in your C++ callbacks to prevent crashes or security issues.
+</Aside>
+
+- **Data Validation:** Always validate incoming data from JavaScript
+- **Error Handling:** Use try-catch blocks when parsing complex data
+- **Function Naming:** Use descriptive names for your JavaScript functions
+- **Single Responsibility:** Keep each listener focused on a specific task
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If your JavaScript listener doesn't work:
+- Ensure the function name doesn't conflict with existing JavaScript functions
+- Check that the `PrismaView` is valid when registering the listener
+- Verify the JavaScript code is calling the correct function name
+- Make sure data is properly formatted when passing to C++
+</Aside>

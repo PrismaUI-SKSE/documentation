@@ -1,0 +1,61 @@
+---
+title: SetScrollingPixelSize
+description: Sets the scrolling distance in pixels for a PrismaView
+sidebar:
+  order: 8
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Sets the scrolling distance in pixels for the specified `PrismaView`. This method allows you to customize how much the view scrolls per mouse wheel increment, enabling fine-tuned control over the scrolling experience.
+
+<Aside type="tip" title="Scroll Optimization">
+Adjust scroll speed based on content density and user interaction patterns. Slower scrolling works well for precise navigation, while faster scrolling is better for browsing large documents.
+</Aside>
+
+## Syntax
+
+```cpp
+void SetScrollingPixelSize(PrismaView view, int pixelSize);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` for which to set the scrolling distance
+
+### `pixelSize` (required)
+- **Type:** `int`
+- **Description:** The scrolling distance value in pixels
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Scroll Configuration">
+
+```cpp
+// Set scroll speed to 30 pixels per wheel increment
+PrismaUI->SetScrollingPixelSize(view, 30);
+logger::info("Scroll speed set to 30 pixels");
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Accessibility">
+Consider providing scroll speed options to accommodate users with different accessibility needs and preferences.
+</Aside>
+
+- **Reasonable Values:** Use scroll sizes between 10-100 pixels for optimal user experience
+- **Content Context:** Adjust scroll speed based on the type of content being displayed
+- **User Control:** Allow users to customize scroll speed through settings
+- **Consistency:** Maintain consistent scroll behavior across similar UI elements

@@ -11,7 +11,14 @@ export default defineConfig({
     starlight({
       plugins: [starlightThemeNext()],
       title: 'Prisma UI',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/PrismaUI-SKSE' }],
+      social: [
+        {
+          icon: 'heart',
+          label: 'Support',
+          href: 'https://www.donationalerts.com/r/starkmp',
+        },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/PrismaUI-SKSE' },
+      ],
       locales: {
         root: {
           label: 'English',
@@ -34,14 +41,19 @@ export default defineConfig({
           autogenerate: { directory: 'getting-started' },
         },
         {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
+          label: 'API',
+          autogenerate: { directory: 'api' },
+        },
+        {
+          label: 'Configuration',
+          autogenerate: { directory: 'configuration' },
         },
       ],
       favicon: '/favicon.ico',
       components: {
         Hero: './src/components/starlight/hero.astro',
         ThemeSelect: './src/components/starlight/null.astro',
+        LanguageSelect: './src/components/starlight/null.astro',
       },
     }),
     react(),

@@ -1,0 +1,40 @@
+---
+title: Focus Management
+description: Advanced configuration and control of PrismaUI focus behavior and menu flags
+sidebar:
+  order: 2
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+PrismaUI provides advanced focus management capabilities through the native `PrismaUI_FocusMenu`. This system allows you to customize how the UI behaves when focused, including cursor visibility, game pause states, and menu interaction patterns.
+
+<Aside type="tip" title="Advanced Control">
+Focus management gives you fine-grained control over how your UI integrates with Skyrim's menu system, allowing for sophisticated user experiences.
+</Aside>
+
+## Focus Menu Access
+
+The focus menu is automatically created when any `PrismaView` gains focus. You can access and modify it through Skyrim's UI system:
+
+```cpp
+auto focusMenu = RE::UI::GetSingleton()->GetMenu("PrismaUI_FocusMenu");
+```
+
+## Basic Usage
+
+```cpp
+// Get the focus menu
+auto focusMenu = RE::UI::GetSingleton()->GetMenu("PrismaUI_FocusMenu");
+
+if (focusMenu) {
+    // Set basic menu flags
+    focusMenu->menuFlags.set(
+        RE::UI_MENU_FLAGS::kUsesCursor,
+        RE::UI_MENU_FLAGS::kModal,
+        RE::UI_MENU_FLAGS::kAllowSaving
+    );
+}
+```

@@ -1,6 +1,196 @@
 ---
 title: Introduction
-description: A guide in my new Starlight docs site.
+sidebar:
+  order: 1
 ---
 
-about...
+import { Card, CardGrid, Tabs, TabItem, Badge, Code, Steps, Aside, LinkCard } from '@astrojs/starlight/components';
+
+# Welcome to Prisma UI
+
+**Prisma UI** is a revolutionary web UI framework specifically designed for **The Elder Scrolls V: Skyrim Special Edition**. It enables modders to create stunning, modern user interfaces using familiar web technologies like HTML, CSS, and JavaScript, while maintaining seamless integration with Skyrim's game engine through SKSE plugins.
+
+<Aside type="tip" title="Why Prisma UI?">
+Traditional Skyrim UI modding requires working with Adobe Flash (SWF) files and ActionScript - outdated technologies that are difficult to work with and limited in capabilities. Prisma UI brings the power of modern web development to Skyrim modding.
+</Aside>
+
+## What Makes Prisma UI Special?
+
+### 🚀 **Performance First**
+Built on **Ultralight WebKit** with DirectX 11 integration, Prisma UI delivers:
+- **60 FPS** smooth performance
+- **10x lighter** than Chromium-based solutions
+- Optimized for gaming environments
+- Minimal impact on Skyrim's performance
+
+### 🎨 **Modern Web Technologies**
+Use the full power of modern web development:
+- **HTML5**, **CSS3**, and **ES2022** JavaScript
+- CSS Grid, Flexbox, animations, and transitions
+- Popular frameworks like **React**, **Vue**, **Svelte**
+- Modern build tools and development workflows
+
+### 🔄 **Bidirectional Communication**
+Seamless integration between your web UI and Skyrim:
+- **C++ ↔ JavaScript** communication
+- JSON data exchange
+- Function return values
+- Real-time game state updates
+
+### 🛠️ **Developer Experience**
+Enjoy modern development practices:
+- **Hot reload** during development
+- Browser dev tools for debugging
+- Test UI directly in your browser
+- Familiar web development workflow
+
+## How It Works
+
+Prisma UI acts as a bridge between Skyrim's C++ environment (via SKSE plugins) and modern web technologies:
+
+1. **Your SKSE Plugin** communicates with Prisma UI through a simple C++ API
+2. **Prisma UI Framework** manages the WebKit engine and handles communication
+3. **WebKit Engine** renders your HTML/CSS/JS interface
+4. **Your Web UI** can send data back to Skyrim through JavaScript calls
+
+## Key Features
+
+<CardGrid>
+  <Card title="Non-Invasive" icon="setting">
+    Integrate web UI step by step without touching Skyrim's vanilla SWF interface system. Your mod works alongside existing UI mods.
+  </Card>
+  
+  <Card title="Lightning Fast" icon="rocket">
+    Optimized WebKit engine delivers 60 FPS performance with minimal memory footprint - perfect for gaming.
+  </Card>
+  
+  <Card title="Web Standards" icon="laptop">
+    Use standard HTML, CSS, and JavaScript. No proprietary languages or tools to learn.
+  </Card>
+  
+  <Card title="Easy Integration" icon="puzzle">
+    Simple C++ API for SKSE plugins. Create views, send data, and handle events with just a few lines of code.
+  </Card>
+</CardGrid>
+
+## What You Can Build
+
+With Prisma UI, you can create any type of interface you can imagine:
+
+- **Inventory Management Systems** with drag-and-drop, filtering, and sorting
+- **Character Sheets** with real-time stat updates and interactive elements
+- **Map Interfaces** with custom markers, zoom, and location tracking
+- **Crafting Systems** with recipe browsers and material calculators
+- **Quest Journals** with rich formatting and progress tracking
+- **Settings Panels** with modern form controls and validation
+- **HUD Elements** with animations and responsive design
+
+## See Prisma UI in Action
+
+<div class="not-content">
+  <div class="aspect-video w-full rounded-xl overflow-hidden bg-zinc-900/50 border border-zinc-700/50">
+    <iframe 
+      width="100%" 
+      height="100%" 
+      src="https://www.youtube.com/embed/5yuIWa3MOtw" 
+      title="Prisma UI Demo" 
+      frameborder="0" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      allowfullscreen
+      class="w-full h-full"
+    ></iframe>
+  </div>
+</div>
+
+## Quick Example
+
+Here's how simple it is to create a UI that communicates with Skyrim:
+
+<Tabs>
+  <TabItem label="C++ (SKSE Plugin)">
+    ```cpp
+    // Create a view and send player data when ready
+    PrismaView view = PrismaUI->CreateView("my-ui/index.html", [](PrismaView view) {
+        // Send current player stats to the UI
+        PrismaUI->Invoke(view, "updatePlayerStats({health: 100, magicka: 50})");
+    });
+
+    // Listen for UI events
+    PrismaUI->RegisterJSListener(view, "castSpell", [](const char* spellName) {
+        logger::info("Player wants to cast: {}", spellName);
+        // Cast the spell in game...
+    });
+    ```
+  </TabItem>
+  
+  <TabItem label="HTML/JavaScript">
+    ```html
+    <div class="player-stats">
+        <div class="stat">Health: <span id="health">0</span></div>
+        <div class="stat">Magicka: <span id="magicka">0</span></div>
+        <button onclick="castFireball()">Cast Fireball</button>
+    </div>
+
+    <script>
+    // Receive data from Skyrim
+    window.updatePlayerStats = (stats) => {
+        document.getElementById('health').textContent = stats.health;
+        document.getElementById('magicka').textContent = stats.magicka;
+    };
+
+    // Send commands to Skyrim
+    function castFireball() {
+        window.castSpell('Fireball');
+    }
+    </script>
+    ```
+  </TabItem>
+</Tabs>
+
+## System Requirements
+
+<Steps>
+1. **Skyrim Special Edition** (SE or AE)
+2. **SKSE64** (Skyrim Script Extender)
+3. **Address Library for SKSE Plugins**
+4. **Keyboard Shortcuts Fix** (for keyboard input)
+5. **Basic C++ knowledge** (for SKSE plugin development)
+6. **Web development knowledge** (HTML, CSS, JavaScript)
+</Steps>
+
+## Getting Started
+
+Ready to revolutionize your Skyrim UI modding experience?
+
+<CardGrid>
+  <LinkCard
+    title="📦 Installation"
+    description="Install Prisma UI and set up your development environment"
+    href="/getting-started/installation/"
+  />
+  <LinkCard
+    title="🚀 Basic Usage"
+    description="Learn the fundamentals with a simple example"
+    href="/getting-started/basic-usage/"
+  />
+  <LinkCard
+    title="📚 API Reference"
+    description="Explore all available methods and functions"
+    href="/api/create-view/"
+  />
+  <LinkCard
+    title="🎮 Example Plugin"
+    description="Download a complete working example"
+    href="https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin"
+  />
+</CardGrid>
+
+<Aside type="note" title="New to SKSE Plugin Development?">
+If you're new to SKSE plugin development, we recommend starting with the [CommonLib-NG](https://github.com/alandtse/CommonLibVR/tree/ng) and our [example plugin](https://github.com/PrismaUI-SKSE/PrismaUI-Example-Plugin) to understand the basics.
+</Aside>
+
+---
+
+**Prisma UI** opens up endless possibilities for Skyrim UI modding. Whether you're creating a simple HUD element or a complex inventory system, you now have the power of modern web technologies at your fingertips.
+
+Let's build the future of Skyrim UI together! 🎮✨

@@ -1,0 +1,89 @@
+---
+title: Focus
+description: Sets input focus to the specified PrismaView and shows the cursor
+sidebar:
+  order: 5
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Sets input focus to the specified `PrismaView` and shows the cursor. This method activates the UI for user interaction and optionally pauses the game to provide an uninterrupted interface experience.
+
+<Aside type="caution" title="Game State Management">
+When using the `pauseGame` parameter, ensure your plugin properly handles game pause/resume states to maintain a smooth user experience.
+</Aside>
+
+## Syntax
+
+```cpp
+bool Focus(PrismaView view, bool pauseGame = false);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to receive focus
+
+### `pauseGame` (optional)
+- **Type:** `bool`
+- **Default:** `false`
+- **Description:** Optional parameter to pause the game when focus is active
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if focus was successfully set; otherwise, `false`
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Focus">
+
+```cpp
+// Simple focus without pausing the game
+bool success = PrismaUI->Focus(view);
+if (success) {
+    logger::info("View focused successfully");
+} else {
+    logger::error("Failed to focus view");
+}
+```
+
+</TabItem>
+<TabItem label="Focus with Game Pause">
+
+```cpp
+// Focus the view and pause the game
+bool success = PrismaUI->Focus(view, true);
+if (success) {
+    logger::info("View focused and game paused");
+    // UI is now active and game is paused
+} else {
+    logger::error("Failed to focus view");
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="User Experience">
+Always provide visual feedback when focus changes occur. Consider showing/hiding UI elements or changing cursor appearance to indicate the current focus state.
+</Aside>
+
+- **Game Pause Management:** Use `pauseGame = true` for menus that require full user attention
+- **Focus Pairing:** Always pair `Focus` calls with corresponding `Unfocus` calls
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If focus isn't working properly:
+- Ensure the `PrismaView` is valid and not destroyed
+- Check that no other views are blocking focus
+- Verify the view's DOM is fully loaded before focusing
+- Make sure you're handling the return value appropriately
+</Aside>

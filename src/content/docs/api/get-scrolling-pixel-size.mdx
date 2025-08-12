@@ -1,0 +1,58 @@
+---
+title: GetScrollingPixelSize
+description: Gets the current scrolling distance in pixels for a PrismaView
+sidebar:
+  order: 7
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Gets the current scrolling distance in pixels for the specified `PrismaView`. This method allows you to retrieve the scroll sensitivity setting, which determines how much the view scrolls per mouse wheel increment.
+
+<Aside type="tip" title="Scroll Customization">
+Use this method in combination with `SetScrollingPixelSize` to create dynamic scroll behavior that adapts to different UI contexts or user preferences.
+</Aside>
+
+## Syntax
+
+```cpp
+int GetScrollingPixelSize(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` from which to get the scrolling distance
+
+## Return Value
+
+- **Type:** `int`
+- **Returns:** The current scrolling distance in pixels
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Scroll Size Check">
+
+```cpp
+// Get current scroll size
+int scrollSize = PrismaUI->GetScrollingPixelSize(view);
+logger::info("Current scroll size: {} pixels", scrollSize);
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="User Experience">
+Consider the content type and user context when working with scroll settings. Different UI scenarios may benefit from different scroll speeds.
+</Aside>
+
+- **Context Awareness:** Adjust scroll speed based on the type of content being displayed
+- **Settings Persistence:** Save user scroll preferences for consistent experience
+- **Validation:** Check the returned value to ensure it's within expected ranges
+- **Performance:** Cache scroll size values when making frequent adjustments

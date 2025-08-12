@@ -1,0 +1,33 @@
+---
+title: Limitations
+sidebar:
+  order: 4
+---
+
+- **WebKit** version is `615.1.18.100.1`.
+- Supports **ES2022** and below JavaScript features.
+- `Video` is not supported. Use `GIF` images instead.
+- `Audio` is not supported. Play sounds from SKSE.
+- `WebGL` is not supported.
+- UI refresh rate has **60 FPS** cap for now.
+- **CPU** rendering is only available for now.
+- JS event `contextmenu` doesn't work. Use this implementation instead:
+  ```ts
+  window.addEventListener('mousedown', function (event) {
+    if (event.button === 2) {
+      // right-click
+      const contextMenuEvent = new MouseEvent('contextmenu', {
+        ...event,
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        screenX: event.pageX,
+        screenY: event.pageY,
+        clientX: event.pageX,
+        clientY: event.pageY,
+      });
+
+      event.target?.dispatchEvent(contextMenuEvent);
+    }
+  });
+  ```

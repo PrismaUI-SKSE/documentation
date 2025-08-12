@@ -1,0 +1,187 @@
+---
+title: InteropCall
+description: Calls JavaScript functions through JS Interop API with optimal performance
+sidebar:
+  order: 11
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Calls a JavaScript function through the JS Interop API, providing the best performance for C++ to JavaScript communication. This method is optimized for high-frequency calls and accepts a string argument to pass data to the JavaScript function.
+
+<Aside type="tip" title="Performance Optimization">
+`InteropCall` is specifically designed for performance-critical scenarios where you need to call JavaScript functions frequently. Use this method when performance is more important than flexibility.
+</Aside>
+
+## Syntax
+
+```cpp
+void InteropCall(
+    PrismaView view, 
+    const char* functionName, 
+    const char* argument
+);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` instance in which the function will be called
+
+### `functionName` (required)
+- **Type:** `const char*`
+- **Description:** The name of the JavaScript function to call
+- **Note:** The function must be globally accessible (e.g., attached to `window`)
+
+### `argument` (required)
+- **Type:** `const char*`
+- **Description:** A string argument to pass to the JavaScript function
+- **Note:** Only accepts string data - use JSON for complex data structures
+
+## Return Value
+
+This method returns `void`. Unlike `Invoke`, `InteropCall` does not support return value callbacks for maximum performance.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Function Call">
+
+```cpp
+// Simple function call with string argument
+PrismaUI->InteropCall(view, "updatePlayerName", "Dragonborn");
+```
+
+```js
+// JavaScript function to receive the call
+window.updatePlayerName = (playerName) => {
+    document.getElementById('player-name').textContent = playerName;
+};
+```
+
+</TabItem>
+<TabItem label="High-Frequency Updates">
+
+```cpp
+// Performance-critical updates (e.g., health bar)
+void UpdateHealthBar() {
+    int currentHealth = GetPlayerHealth();
+    std::string healthStr = std::to_string(currentHealth);
+    
+    // Fast update without callback overhead
+    PrismaUI->InteropCall(view, "setHealthValue", healthStr.c_str());
+}
+
+// Call this frequently in game loop
+void GameLoop() {
+    UpdateHealthBar();  // Called every frame
+}
+```
+
+```js
+// JavaScript - optimized for frequent updates
+window.setHealthValue = (health) => {
+    // Direct DOM manipulation for best performance
+    const healthBar = document.getElementById('health-bar');
+    healthBar.style.width = health + '%';
+};
+```
+
+</TabItem>
+<TabItem label="JSON Data Transfer">
+
+```cpp
+#include <nlohmann/json.hpp>
+using JSON = nlohmann::json;
+
+// Send complex data as JSON string
+void SendPlayerStats() {
+    JSON playerStats = {
+        {"health", GetPlayerHealth()},
+        {"magicka", GetPlayerMagicka()},
+        {"stamina", GetPlayerStamina()},
+        {"level", GetPlayerLevel()}
+    };
+    
+    // Convert to string and send via InteropCall
+    std::string jsonStr = playerStats.dump();
+    PrismaUI->InteropCall(view, "updatePlayerStats", jsonStr.c_str());
+}
+```
+
+```js
+// JavaScript - parse JSON data
+window.updatePlayerStats = (jsonData) => {
+    const stats = JSON.parse(jsonData);
+    
+    // Update UI elements
+    document.getElementById('health').textContent = stats.health;
+    document.getElementById('magicka').textContent = stats.magicka;
+    document.getElementById('stamina').textContent = stats.stamina;
+    document.getElementById('level').textContent = stats.level;
+};
+```
+
+</TabItem>
+</Tabs>
+
+## Performance Comparison
+
+<Aside type="tip" title="When to Use InteropCall">
+Use `InteropCall` for frequent updates like position tracking or real-time data. Use `Invoke` for complex operations that need return values.
+</Aside>
+
+| Method | Performance | Return Values | Use Case |
+|--------|-------------|---------------|----------|
+| `InteropCall` | **Highest** | No | Frequent updates, real-time data |
+| `Invoke` | Standard | Yes | Complex operations, one-time calls |
+
+## Best Practices
+
+<Aside type="caution" title="String-Only Arguments">
+`InteropCall` only accepts string arguments. For complex data, serialize to JSON or use multiple calls with simple string values.
+</Aside>
+
+- **Performance Critical:** Use for high-frequency calls and real-time updates
+- **String Arguments:** Always pass data as strings - use JSON for complex structures
+- **No Return Values:** Don't expect return values - use `RegisterJSListener` for bidirectional communication
+- **Function Availability:** Ensure JavaScript functions are globally accessible
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If `InteropCall` isn't working as expected:
+- Verify the JavaScript function exists and is globally accessible
+- Check that the function name is spelled correctly
+- Ensure the argument is properly formatted as a string
+- Verify the `PrismaView` is valid
+- Remember that no return values or error feedback is provided
+</Aside>
+
+## Migration from [Invoke](/api/invoke)
+
+If you're converting from `Invoke` to `InteropCall` for performance:
+
+```cpp
+// Before (using Invoke)
+PrismaUI->Invoke(view, "updateHealth(100)");
+
+// After (using InteropCall)
+PrismaUI->InteropCall(view, "updateHealth", "100");
+```
+
+```js
+// JavaScript function needs to accept argument
+// Before
+window.updateHealth = () => {
+    // Function was called with embedded argument
+};
+
+// After
+window.updateHealth = (healthValue) => {
+    // Function receives argument as parameter
+};

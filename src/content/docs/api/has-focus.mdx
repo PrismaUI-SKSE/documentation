@@ -1,0 +1,50 @@
+---
+title: HasFocus
+description: Checks if the specified PrismaView has input focus
+sidebar:
+  order: 4
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+Checks if the specified `PrismaView` has input focus. This method is useful for determining whether the UI is currently receiving user input, which can help manage game state and input handling.
+
+<Aside type="tip" title="Focus Management">
+Use this method in combination with `Focus` and `Unfocus` to create sophisticated input management systems that respond to user interaction patterns.
+</Aside>
+
+## Syntax
+
+```cpp
+bool HasFocus(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to check for focus state
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if the `PrismaView` has focus; otherwise, `false`
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Focus Check">
+
+```cpp
+// Simple focus state check
+if (PrismaUI->HasFocus(view)) {
+    logger::info("View has focus - UI is active");
+} else {
+    logger::info("View does not have focus - UI is inactive");
+}
+```
+
+</TabItem>
+</Tabs>
