@@ -113,9 +113,7 @@ void SendPlayerData() {
 
 ```js
 // JavaScript function to handle the JSON data
-window.updatePlayerInfo = (data) => {
-    const playerData = JSON.parse(data);
-
+window.updatePlayerInfo = (playerData) => {
     document.getElementById('player-name').textContent = playerData.name;
     document.getElementById('player-level').textContent = playerData.level;
     document.getElementById('health-value').textContent = playerData.health;

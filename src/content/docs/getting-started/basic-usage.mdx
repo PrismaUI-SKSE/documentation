@@ -374,10 +374,8 @@ window.setPlayerHealth = (health) => {
     document.getElementById('player-health').textContent = health;
 };
 
-window.updatePlayerData = (dataString) => {
+window.updatePlayerData = (data) => {
     try {
-        const data = JSON.parse(dataString);
-        
         if (data.health !== undefined) {
             document.getElementById('player-health').textContent = data.health;
         }
