@@ -24,10 +24,6 @@ export default defineConfig({
           label: 'English',
           lang: 'en',
         },
-        ru: {
-          label: 'Русский',
-          lang: 'ru',
-        },
       },
       logo: {
         light: './src/assets/brand-logo.svg',
