@@ -48,11 +48,16 @@ export default defineConfig({
           label: 'Configuration',
           autogenerate: { directory: 'configuration' },
         },
+        {
+          label: 'Guides',
+          autogenerate: { directory: 'guides' },
+        },
       ],
       favicon: '/favicon.ico',
       components: {
         Hero: './src/components/starlight/hero.astro',
         ThemeSelect: './src/components/starlight/null.astro',
+        ThemeProvider: './src/components/starlight/theme-provider.astro',
         LanguageSelect: './src/components/starlight/null.astro',
       },
     }),
