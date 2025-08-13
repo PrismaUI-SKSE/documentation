@@ -130,6 +130,53 @@ window.updatePlayerInfo = (data) => {
 Using JSON provides type safety, easy serialization, and makes your data structure clear and maintainable. The [nlohmann/json](https://github.com/nlohmann/json) library automatically handles proper escaping and formatting.
 </Aside>
 
+## String Escaping
+
+<Aside type="caution" title="Escape Characters Warning">
+When passing strings containing quotes, backslashes, or special characters to JavaScript, you must properly escape them to prevent syntax errors and potential security issues.
+</Aside>
+
+### Escape Function Example
+
+Here's a utility function to safely escape strings for JavaScript:
+
+```cpp
+std::string escapeStringForJavaScript(const std::string& input) {
+    std::ostringstream ss;
+    for (char c : input) {
+        switch (c) {
+        case '\'': ss << "\\'"; break;
+        case '\"': ss << "\\\""; break;
+        case '\\': ss << "\\\\"; break;
+        case '\n': ss << "\\n";  break;
+        case '\r': ss << "\\r";  break;
+        case '\t': ss << "\\t";  break;
+        case '\b': ss << "\\b";  break;
+        case '\f': ss << "\\f";  break;
+        case '/':  ss << "\\/";  break;
+        default:
+            ss << c;
+            break;
+        }
+    }
+    return ss.str();
+}
+```
+
+### Usage Example
+
+```cpp
+// Unsafe - could cause JavaScript syntax errors
+std::string someText = "I don't like Flash";
+std::string script = "someFunction('" + someText + "')";  // WRONG!
+PrismaUI->Invoke(view, script.c_str());
+
+// Safe - properly escaped
+std::string someText = "I don't like Flash";
+std::string script = "someFunction('" + escapeStringForJavaScript(someText) + "')";
+PrismaUI->Invoke(view, script.c_str());
+```
+
 ## Best Practices
 
 <Aside type="tip" title="Performance Tip">
@@ -137,7 +184,7 @@ Batch multiple UI updates when possible instead of calling `Invoke` multiple tim
 </Aside>
 
 - **DOM Ready:** Always ensure the DOM is ready before calling `Invoke`
-- **String Escaping:** Properly escape quotes and special characters in JavaScript strings
+- **String Escaping:** Always escape strings using the provided function or similar method
 - **Return Values:** Use callbacks for JavaScript functions that return data
 - **Performance:** Minimize frequent `Invoke` calls during game loops
 
