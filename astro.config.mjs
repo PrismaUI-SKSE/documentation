@@ -13,9 +13,9 @@ export default defineConfig({
       title: 'Prisma UI',
       social: [
         {
-          icon: 'heart',
-          label: 'Support',
-          href: 'https://www.donationalerts.com/r/starkmp',
+          icon: 'discord',
+          label: 'Discord',
+          href: 'https://discord.gg/bawdketrFX',
         },
         { icon: 'github', label: 'GitHub', href: 'https://github.com/PrismaUI-SKSE' },
       ],
