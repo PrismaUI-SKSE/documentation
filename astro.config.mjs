@@ -9,6 +9,7 @@ import starlightThemeNext from 'starlight-theme-next';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://prismaui.dev',
+  output: 'server',
   integrations: [
     sitemap({
       changefreq: 'weekly',
