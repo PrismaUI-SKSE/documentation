@@ -10,7 +10,7 @@ import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
 
 ## Overview
 
-Calls a JavaScript function through the JS Interop API, providing the best performance for C++ to JavaScript communication. This method is optimized for high-frequency calls and accepts a string argument to pass data to the JavaScript function.
+Calls a JavaScript function through the JS Interop API, providing good performance for C++ to JavaScript communication. This method is optimized for high-frequency calls and accepts a string argument to pass data to the JavaScript function.
 
 <Aside type="tip" title="Performance Optimization">
 `InteropCall` is specifically designed for performance-critical scenarios where you need to call JavaScript functions frequently. Use this method when performance is more important than flexibility.
@@ -85,7 +85,7 @@ void GameLoop() {
 ```js
 // JavaScript - optimized for frequent updates
 window.setHealthValue = (health) => {
-    // Direct DOM manipulation for best performance
+    // Direct DOM manipulation for good performance
     const healthBar = document.getElementById('health-bar');
     healthBar.style.width = health + '%';
 };
