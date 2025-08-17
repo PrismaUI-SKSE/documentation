@@ -59,20 +59,6 @@ export default defineConfig({
             content: 'Prisma UI',
           },
         },
-        {
-          tag: 'meta',
-          attrs: {
-            property: 'og:image:width',
-            content: '1200',
-          },
-        },
-        {
-          tag: 'meta',
-          attrs: {
-            property: 'og:image:height',
-            content: '630',
-          },
-        },
         // Twitter Card
         {
           tag: 'meta',
@@ -187,9 +173,9 @@ export default defineConfig({
         {
           icon: 'discord',
           label: 'Discord',
-          href: 'https://discord.gg/bawdketrFX',
+          href: '/discord',
         },
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/PrismaUI-SKSE' },
+        { icon: 'github', label: 'GitHub', href: '/github' },
       ],
       locales: {
         root: {
