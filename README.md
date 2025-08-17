@@ -8,7 +8,7 @@
 
 ## 🚀 Features
 
-- **⚡ Lightning Fast**: 10x lighter than Chromium with 60fps performance using optimized WebKit integration
+- **⚡ Lightning Fast**: 10x lighter than Chromium with high performance using optimized WebKit integration
 - **🎨 Modern Technologies**: Use HTML, CSS, JavaScript, React, Vue, and any modern frontend framework
 - **🔧 Developer Friendly**: Develop and test directly in browser with hot reload and modern dev tools
 - **🔄 Bidirectional Communication**: Seamless C++ ↔ JavaScript communication with JSON data exchange
