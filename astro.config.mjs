@@ -20,7 +20,7 @@ export default defineConfig({
       plugins: [starlightThemeNext()],
       title: 'Prisma UI',
       description:
-        'Skyrim Next-Gen Web UI Framework - Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies. 10x faster than Chromium with 60fps performance.',
+        'Skyrim Next-Gen Web UI Framework - Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies.',
       head: [
         // Open Graph / Facebook
         {
@@ -42,7 +42,7 @@ export default defineConfig({
           attrs: {
             property: 'og:description',
             content:
-              'Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies. 10x faster than Chromium with 60fps performance.',
+              'Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies.',
           },
         },
         {
@@ -93,7 +93,7 @@ export default defineConfig({
           attrs: {
             name: 'twitter:description',
             content:
-              'Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies. 10x faster than Chromium with 60fps performance.',
+              'Create beautiful and modern user interfaces for Skyrim with HTML, CSS, JavaScript, React, Vue and other web technologies.',
           },
         },
         // Additional SEO meta tags
