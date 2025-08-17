@@ -9,7 +9,6 @@ import starlightThemeNext from 'starlight-theme-next';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://prismaui.dev',
-  output: 'server',
   integrations: [
     sitemap({
       changefreq: 'weekly',
@@ -174,9 +173,9 @@ export default defineConfig({
         {
           icon: 'discord',
           label: 'Discord',
-          href: '/discord',
+          href: 'https://discord.gg/bawdketrFX',
         },
-        { icon: 'github', label: 'GitHub', href: '/github' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/PrismaUI-SKSE' },
       ],
       locales: {
         root: {
