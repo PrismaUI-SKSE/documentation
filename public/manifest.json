@@ -1,0 +1,19 @@
+{
+  "name": "Prisma UI - Skyrim Next-Gen Web UI Framework",
+  "short_name": "Prisma UI",
+  "description": "Revolutionary web UI framework for Skyrim modding. Create beautiful, modern user interfaces with HTML, CSS, JavaScript, React, Vue.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f23",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["developer", "productivity", "games"],
+  "lang": "en",
+  "dir": "ltr"
+}
