@@ -26,7 +26,7 @@ const versions: Version[] = [
       label: 'Latest Features',
       className: 'text-blue-500 border-blue-500',
     },
-    url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.1.0-rc/PrismaUI_1_1_0_rc.zip',
+    url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.1.0-rc/PrismaUI_1_1_0-rc.zip',
   },
   {
     version: '1.0.0',
@@ -49,23 +49,25 @@ export const VersionSelector = () => (
       <DropdownMenuSeparator />
       {versions.map((version) => (
         <DropdownMenuItem key={version.version} className="cursor-pointer">
-          <div className="flex items-center justify-between w-full gap-3">
+          <a
+            href={version.url}
+            target="_blank"
+            className="flex items-center justify-between w-full gap-3"
+          >
             <div className="flex flex-col gap-0.5">
               <span className="font-medium">{version.version}</span>
             </div>
             {version.badge && (
-              <a
-                href={version.url}
-                target="_blank"
+              <span
                 className={cn(
                   `px-2 py-0.5 text-xs font-medium rounded-lg border`,
                   version.badge.className
                 )}
               >
                 {version.badge.label}
-              </a>
+              </span>
             )}
-          </div>
+          </a>
         </DropdownMenuItem>
       ))}
     </DropdownMenuContent>
