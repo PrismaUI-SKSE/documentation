@@ -1,7 +1,6 @@
 # Prisma UI - Skyrim Next-Gen Web UI Framework
 
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fprismaui.dev)](https://prismaui.dev)
-[![GitHub](https://img.shields.io/github/license/PrismaUI-SKSE/prismaui-website)](https://github.com/PrismaUI-SKSE/prismaui-website)
 [![Discord](https://img.shields.io/discord/your-discord-id?label=Discord&logo=discord)](https://discord.gg/bawdketrFX)
 
 > Revolutionary web UI framework for Skyrim modding. Create beautiful, modern user interfaces with HTML, CSS, JavaScript, React, Vue and other web technologies.
@@ -37,7 +36,7 @@ This website is built with [Astro](https://astro.build) and [Starlight](https://
 ## 🤝 Community
 
 - **💬 Discord**: [Join our community](https://discord.gg/bawdketrFX)
-- **🐛 Issues**: [Report bugs](https://github.com/orgs/PrismaUI-SKSE/discussions)
+- **🐛 Issues**: [Report bugs](https://github.com/PrismaUI-SKSE/framework/issues)
 
 ## 🙏 Acknowledgments
 
