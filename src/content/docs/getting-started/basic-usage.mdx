@@ -91,9 +91,11 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse) {
 Now let's create a PrismaView and set up the communication:
 
 ```cpp
+static PrismaView view;
+
 void InitializeUI() {
     // Create a view with DOM ready callback
-    PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+    view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
         SKSE::log::info("View DOM is ready {}", view);
 
         // Initialize the UI with game data

@@ -1,0 +1,89 @@
+---
+title: Hide
+description: Hides a visible PrismaView
+sidebar:
+  order: 15
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.1.0-rc** version.
+</Aside>
+
+## Overview
+
+Hides a visible `PrismaView`. This method sets the view's visibility flag to prevent it from being rendered, while preserving its state and resources. If the view has focus when hidden, it will be automatically unfocused.
+
+<Aside type="caution" title="Automatic Unfocus">
+When hiding a focused view, `Unfocus` is automatically called, which unpauses the game (if paused), disables input capture, closes the focus menu, and restores game control to the player.
+</Aside>
+
+## Syntax
+
+```cpp
+void Hide(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to hide
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Hide a visible view
+PrismaUI->Hide(view);
+```
+
+</TabItem>
+</Tabs>
+
+## Behavior Details
+
+<Aside type="tip" title="State Preservation">
+Hidden views retain their internal state, DOM content, and JavaScript context. When shown again, they resume exactly where they left off.
+</Aside>
+
+- Sets the `isHidden` flag to `true`
+- View stops rendering immediately
+- View stops processing input events
+- If view has focus, automatically calls `Unfocus`:
+  - Unpauses the game (if paused by `Focus`)
+  - Disables input capture
+  - Closes focus menu
+  - Restores game control
+- View state and content are preserved
+
+## Best Practices
+
+<Aside type="tip" title="Resource Management">
+Use `Hide` instead of `Destroy` for UI elements that will be shown again. This preserves state and avoids the overhead of recreating views.
+</Aside>
+
+- **Temporary Hiding:** Use for UI that will be shown again
+- **State Preservation:** Hidden views keep their state and content
+- **Focus Awareness:** Remember that hiding automatically unfocuses
+- **Performance:** More efficient than destroying and recreating views
+- **Pair with Show:** Use `Show` to make hidden views visible again
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If hiding doesn't work as expected:
+- Verify the view is valid using `IsValid`
+- Check that the view isn't already hidden
+- Ensure you're not trying to hide a destroyed view
+- Remember that hiding automatically unfocuses the view
+- Check logs for any warnings about the operation
+</Aside>

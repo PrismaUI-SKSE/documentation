@@ -1,0 +1,58 @@
+---
+title: GetOrder
+description: Gets the current rendering order (z-order) of a PrismaView
+sidebar:
+  order: 13
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.1.0-rc** version.
+</Aside>
+
+## Overview
+
+Returns the current rendering order (z-order) for the specified `PrismaView`. This method allows you to query a view's position in the rendering stack, which is useful for managing UI layers and debugging rendering issues.
+
+<Aside type="tip" title="Order Inspection">
+Use this method to inspect the current layer hierarchy of game views, especially when debugging rendering order issues or implementing dynamic layer management systems.
+</Aside>
+
+## Syntax
+
+```cpp
+int GetOrder(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` from which to get the rendering order
+
+## Return Value
+
+- **Type:** `int`
+- **Returns:** The current order value of the view
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Get current order of a view
+int currentOrder = PrismaUI->GetOrder(view);
+
+SKSE::log::info("View order: {}", currentOrder);
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+- **Debugging Tool:** Use for logging and debugging layer hierarchies
+- **Conditional Logic:** Use order comparisons for layer-dependent behavior

@@ -1,0 +1,90 @@
+---
+title: SetOrder
+description: Sets the rendering order (z-order) for a PrismaView
+sidebar:
+  order: 12
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.1.0-rc** version.
+</Aside>
+
+## Overview
+
+Sets the rendering order (z-order) for the specified `PrismaView`. This method controls the layering of views, determining which views appear on top of others during rendering.
+
+<Aside type="tip" title="Layer Management">
+Views with lower order values are rendered first (appear "below"), while views with higher order values are rendered on top. This is useful when you need to control which plugin's UI appears on top of another.
+</Aside>
+
+## Syntax
+
+```cpp
+void SetOrder(PrismaView view, int order);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` for which to set the rendering order
+
+### `order` (required)
+- **Type:** `int`
+- **Description:** The z-order value for the view. Lower values render first (background), higher values render last (foreground)
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Set first plugin's view to render on top
+PrismaUI->SetOrder(firstPluginView, 100);
+
+// Set second plugin's view to render behind
+PrismaUI->SetOrder(secondPluginView, 1);
+```
+
+</TabItem>
+</Tabs>
+
+## Behavior Details
+
+<Aside type="caution" title="Automatic Order Assignment">
+When creating a new view with `CreateView`, it automatically receives an order value of `maxOrder + 1`, where maxOrder is the highest order among existing views. This ensures new views appear on top by default.
+</Aside>
+
+- Views are sorted by order value before rendering in `DrawViews()`
+- Lower order values render first (appear behind)
+- Higher order values render last (appear on top)
+- Multiple views can have the same order value
+- New views automatically get `maxOrder + 1` on creation
+
+## Best Practices
+
+<Aside type="tip" title="Layer Organization">
+Define layer constants for different UI types (background, main UI, overlays, modals) to maintain consistent and predictable rendering order throughout your application.
+</Aside>
+
+- **Use Constants:** Define layer constants for consistent ordering
+- **Logical Grouping:** Group related views in similar order ranges
+- **Leave Gaps:** Use increments of 10 or 50 to allow for future insertions
+- **Document Layers:** Comment your layer hierarchy for maintainability
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If views aren't rendering in the expected order:
+- Verify the order values are set correctly
+- Check that the view is valid and not destroyed
+- Ensure views aren't being recreated with default order values
+- Remember that order changes take effect in the next render frame
+</Aside>

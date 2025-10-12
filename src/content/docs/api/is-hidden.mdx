@@ -1,0 +1,81 @@
+---
+title: IsHidden
+description: Checks if a PrismaView is currently hidden
+sidebar:
+  order: 16
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.1.0-rc** version.
+</Aside>
+
+## Overview
+
+Checks if the specified `PrismaView` is currently hidden. This method allows you to query a view's visibility state, which is useful for conditional UI logic and state management.
+
+<Aside type="tip" title="Visibility State Check">
+Use this method to check visibility before performing operations that depend on whether a view is visible or hidden, such as toggling visibility or conditional rendering logic.
+</Aside>
+
+## Syntax
+
+```cpp
+bool IsHidden(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to check for hidden state
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if the view is hidden (or not found), `false` if the view is visible
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Check if view is hidden
+if (PrismaUI->IsHidden(view)) {
+    SKSE::log::info("View is hidden");
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Behavior Details
+
+- Returns `true` if the view's `isHidden` flag is set to `true`
+- Returns `false` if the view is visible
+- Returns `true` if the view is not found (with a warning logged)
+
+## Best Practices
+
+<Aside type="tip" title="Defensive Programming">
+Always check visibility state before performing visibility-dependent operations to avoid unnecessary calls and ensure correct UI behavior.
+</Aside>
+
+- **State Validation:** Check visibility before show/hide operations
+- **Conditional Logic:** Use for UI state-dependent behavior
+- **Toggle Operations:** Essential for implementing toggle functionality
+- **Error Handling:** Check for `true` return with invalid views
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If `IsHidden` returns unexpected results:
+- Verify the view is valid using `IsValid`
+- Check that the view hasn't been destroyed
+- Remember that `IsHidden` returns `true` for invalid/not found views
+- Look for warning messages in the log
+- Ensure you're checking the correct view instance
+</Aside>

@@ -1,0 +1,83 @@
+---
+title: Show
+description: Makes a hidden PrismaView visible
+sidebar:
+  order: 14
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.1.0-rc** version.
+</Aside>
+
+## Overview
+
+Makes a hidden `PrismaView` visible. This method sets the view's visibility flag to allow it to be rendered in the next frame, enabling you to show previously hidden UI elements without recreating them.
+
+<Aside type="tip" title="Efficient UI Management">
+Use `Show` and `Hide` to toggle UI visibility instead of destroying and recreating views. This approach is more efficient and preserves the view's state.
+</Aside>
+
+## Syntax
+
+```cpp
+void Show(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to make visible
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Show a previously hidden view
+PrismaUI->Show(view);
+```
+
+</TabItem>
+</Tabs>
+
+## Behavior Details
+
+<Aside type="caution" title="Operation Queue">
+If the view is already visible, the operation is ignored with a debug log message.
+</Aside>
+
+- Sets the `isHidden` flag to `false`
+- View begins rendering in the next frame
+- If view is already visible, operation is silently ignored
+- Does not affect focus state - use `Focus` separately if needed
+
+## Best Practices
+
+<Aside type="tip" title="State Management">
+Combine `Show` with `Focus` when you want to both display and activate a view for user interaction. Use `Show` alone when you want to display a view without capturing input.
+</Aside>
+
+- **Pair with Hide:** Use `Show` and `Hide` as complementary operations
+- **Check State:** Use `IsHidden` to check visibility before showing
+- **Focus Management:** Call `Focus` separately if input interaction is needed
+- **Performance:** Prefer show/hide over destroy/create for temporary UI
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If a view doesn't appear after calling `Show`:
+- Verify the view is valid using `IsValid`
+- Check that the view's z-order isn't behind other views
+- Ensure the view's HTML content is properly loaded
+- Verify no other views are blocking it
+- Check that the view was previously hidden, not destroyed
+</Aside>

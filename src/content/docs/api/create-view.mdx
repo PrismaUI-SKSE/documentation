@@ -55,8 +55,10 @@ PrismaView view = PrismaUI->CreateView("MyPlugin/index.html");
 <TabItem label="With DOM Ready Callback">
 
 ```cpp
+static PrismaView view;
+
 // View creation with DOM ready callback
-PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
     // The callback is executed after the DOM tree is fully initialized
     SKSE::log::info("View DOM is ready {}", view);
     
@@ -72,6 +74,7 @@ PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view
 #include "PrismaUI_API.h"
 
 PRISMA_UI_API::IVPrismaUI1* PrismaUI;
+static PrismaView view;
 
 static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
 {
@@ -83,7 +86,7 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
         );
 
         // Create view with comprehensive setup
-        PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
+        view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
             SKSE::log::info("View DOM is ready {}", view);
             
             // Initialize UI state
