@@ -121,7 +121,7 @@ Here's how simple it is to create a UI that communicates with Skyrim:
 
     // Listen for UI events
     PrismaUI->RegisterJSListener(view, "castSpell", [](const char* spellName) {
-        logger::info("Player wants to cast: {}", spellName);
+        SKSE::log::info("Player wants to cast: {}", spellName);
         // Cast the spell in game...
     });
     ```

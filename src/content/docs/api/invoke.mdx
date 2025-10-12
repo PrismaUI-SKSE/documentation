@@ -69,7 +69,7 @@ window.setBodyBackgroundColor = (color) => {
 ```cpp
 // JavaScript execution with callback to receive return value
 static void OnReceiveBackgroundColor(const char* data) {
-    logger::info("Current background color: {}", data);
+    SKSE::log::info("Current background color: {}", data);
 }
 
 PrismaUI->Invoke(view, "getBodyBackgroundColor()", OnReceiveBackgroundColor);

@@ -53,7 +53,7 @@ This method returns `void`.
 ```cpp
 // Register a simple event handler
 PrismaUI->RegisterJSListener(view, "sendDataToSKSE", [](const char* data) -> void {
-    logger::info("Received data from JS: {}", data);
+    SKSE::log::info("Received data from JS: {}", data);
 });
 ```
 
@@ -76,7 +76,7 @@ PrismaUI->RegisterJSListener(view, "onPlayerAction", [](const char* data) -> voi
         CastPlayerSpell();
     }
     
-    logger::info("Player action executed: {}", data);
+    SKSE::log::info("Player action executed: {}", data);
 });
 ```
 
@@ -112,9 +112,9 @@ PrismaUI->RegisterJSListener(view, "updateSettings", [](const char* data) -> voi
         SetVolume(volume);
         SetTheme(theme);
         
-        logger::info("Settings updated successfully");
+        SKSE::log::info("Settings updated successfully");
     } catch (const std::exception& e) {
-        logger::error("Failed to parse settings: {}", e.what());
+        SKSE::log::error("Failed to parse settings: {}", e.what());
     }
 });
 ```

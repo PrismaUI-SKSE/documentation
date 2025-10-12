@@ -52,11 +52,11 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
         );
 
         if (!PrismaUI) {
-            logger::error("Failed to initialize PrismaUI API");
+            SKSE::log::error("Failed to initialize PrismaUI API");
             return;
         }
 
-        logger::info("PrismaUI API initialized successfully");
+        SKSE::log::info("PrismaUI API initialized successfully");
         
         // Initialize your UI here
         InitializeUI();
@@ -75,7 +75,7 @@ SKSEPluginLoad(const SKSE::LoadInterface* skse) {
     // Register for SKSE messages
     auto messaging = SKSE::GetMessagingInterface();
     if (!messaging->RegisterListener("SKSE", SKSEMessageHandler)) {
-        logger::error("Failed to register message listener");
+        SKSE::log::error("Failed to register message listener");
         return false;
     }
 
@@ -94,7 +94,7 @@ Now let's create a PrismaView and set up the communication:
 void InitializeUI() {
     // Create a view with DOM ready callback
     PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
-        logger::info("View DOM is ready {}", view);
+        SKSE::log::info("View DOM is ready {}", view);
 
         // Initialize the UI with game data
         PrismaUI->Invoke(view, "updatePlayerStatus('Ready for adventure!')");
@@ -106,15 +106,15 @@ void InitializeUI() {
 
     // Register JavaScript event listeners
     PrismaUI->RegisterJSListener(view, "onPlayerAction", [](const char* data) -> void {
-        logger::info("Player action received: {}", data);
+        SKSE::log::info("Player action received: {}", data);
         
         std::string action = data;
         if (action == "heal") {
             // Implement healing logic
-            logger::info("Healing player...");
+            SKSE::log::info("Healing player...");
         } else if (action == "save_game") {
             // Implement save game logic
-            logger::info("Saving game...");
+            SKSE::log::info("Saving game...");
         }
     });
 
@@ -511,7 +511,7 @@ Use callbacks to get return values from JavaScript functions:
 ```cpp
 // C++ - Request data with callback
 PrismaUI->Invoke(view, "getCurrentSettings()", [](const char* data) -> void {
-    logger::info("Current settings: {}", data);
+    SKSE::log::info("Current settings: {}", data);
     
     // Parse and use the returned data
     try {
@@ -519,7 +519,7 @@ PrismaUI->Invoke(view, "getCurrentSettings()", [](const char* data) -> void {
         bool vsync = settings["vsync"];
         // Apply settings...
     } catch (const std::exception& e) {
-        logger::error("Failed to parse settings: {}", e.what());
+        SKSE::log::error("Failed to parse settings: {}", e.what());
     }
 });
 ```

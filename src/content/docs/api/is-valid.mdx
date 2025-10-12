@@ -41,9 +41,9 @@ bool IsValid(PrismaView view);
 // Simple validity check before operation
 if (PrismaUI->IsValid(view)) {
     PrismaUI->Invoke(view, "updateUI()");
-    logger::info("View is valid - operation performed");
+    SKSE::log::info("View is valid - operation performed");
 } else {
-    logger::warn("View is invalid - operation skipped");
+    SKSE::log::warn("View is invalid - operation skipped");
 }
 ```
 

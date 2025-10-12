@@ -28,7 +28,7 @@ PrismaView CreateView(
 
 ### `htmlPath` (required)
 - **Type:** `const char*`
-- **Description:** The path to the HTML file that will be loaded into the `PrismaView`
+- **Description:** The path to the HTML file that will be loaded into the `PrismaView` (or you can pass a website URL which should starts with `http://` or `https://`)
 - **Base Directory:** `Skyrim/Data/PrismaUI/views/`
 
 ### `onDomReadyCallback` (optional)
@@ -58,7 +58,7 @@ PrismaView view = PrismaUI->CreateView("MyPlugin/index.html");
 // View creation with DOM ready callback
 PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
     // The callback is executed after the DOM tree is fully initialized
-    logger::info("View DOM is ready {}", view);
+    SKSE::log::info("View DOM is ready {}", view);
     
     // You can now safely invoke JavaScript methods
     PrismaUI->Invoke(view, "initializeUI()");
@@ -84,7 +84,7 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
 
         // Create view with comprehensive setup
         PrismaView view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
-            logger::info("View DOM is ready {}", view);
+            SKSE::log::info("View DOM is ready {}", view);
             
             // Initialize UI state
             PrismaUI->Invoke(view, "setPlayerName('" + GetPlayerName() + "')");
@@ -93,7 +93,7 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
 
         // Register JavaScript event listeners
         PrismaUI->RegisterJSListener(view, "onButtonClick", [](const char* data) -> void {
-            logger::info("Button clicked with data: {}", data);
+            SKSE::log::info("Button clicked with data: {}", data);
         });
 
         break;

@@ -136,7 +136,7 @@ PrismaView view = PrismaUI->CreateView("my-ui/index.html", [](PrismaView view) {
 
 // Register listener for UI events
 PrismaUI->RegisterJSListener(view, "castSpell", [](const char* spellName) {
-    logger::info("Player wants to cast: {}", spellName);
+    SKSE::log::info("Player wants to cast: {}", spellName);
     // Cast spell in game...
 });`} lang="cpp" title="SKSE Plugin Integration" />
 

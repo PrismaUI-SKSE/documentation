@@ -46,9 +46,9 @@ bool Focus(PrismaView view, bool pauseGame = false);
 // Simple focus without pausing the game
 bool success = PrismaUI->Focus(view);
 if (success) {
-    logger::info("View focused successfully");
+    SKSE::log::info("View focused successfully");
 } else {
-    logger::error("Failed to focus view");
+    SKSE::log::error("Failed to focus view");
 }
 ```
 
@@ -59,10 +59,10 @@ if (success) {
 // Focus the view and pause the game
 bool success = PrismaUI->Focus(view, true);
 if (success) {
-    logger::info("View focused and game paused");
+    SKSE::log::info("View focused and game paused");
     // UI is now active and game is paused
 } else {
-    logger::error("Failed to focus view");
+    SKSE::log::error("Failed to focus view");
 }
 ```
 

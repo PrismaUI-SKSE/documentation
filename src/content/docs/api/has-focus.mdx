@@ -40,9 +40,9 @@ bool HasFocus(PrismaView view);
 ```cpp
 // Simple focus state check
 if (PrismaUI->HasFocus(view)) {
-    logger::info("View has focus - UI is active");
+    SKSE::log::info("View has focus - UI is active");
 } else {
-    logger::info("View does not have focus - UI is inactive");
+    SKSE::log::info("View does not have focus - UI is inactive");
 }
 ```
 
