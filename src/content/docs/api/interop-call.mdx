@@ -176,11 +176,14 @@ PrismaUI->InteropCall(view, "updateHealth", "100");
 ```js
 // JavaScript function needs to accept argument
 // Before
-window.updateHealth = () => {
+window.updateHealth = (healthValue) => {
     // Function was called with embedded argument
 };
 
 // After
 window.updateHealth = (healthValue) => {
+    // InteropCall sends only string argument
+    const transformedValue = Number(healthValue);
+
     // Function receives argument as parameter
 };
