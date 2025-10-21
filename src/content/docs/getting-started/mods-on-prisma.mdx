@@ -1,0 +1,34 @@
+---
+title: ⭐ Mods on Prisma UI
+sidebar:
+  order: 6
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+---
+
+export const mods = [
+  {
+    name: 'Skyrim True Believer (STB)',
+    url: 'https://skytb.ru/'
+  },
+  {
+    name: 'TK Dodge Redux',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/160098'
+  },
+  {
+    name: 'STB Markers Control',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/161110'
+  }
+];
+
+<ul>
+  {mods.map((mod) => (
+    <li key={mod.url}>
+      <a href={mod.url} target="_blank" rel="noopener noreferrer">
+        {mod.name}
+      </a>
+    </li>
+  ))}
+</ul>
