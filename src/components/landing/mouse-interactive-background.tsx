@@ -1,7 +1,9 @@
 'use client';
 
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
+
+import skyrimLogo from '@/assets/skyrim-logo-silver.svg';
 
 export default function MouseInteractiveBackground() {
   const mouseX = useMotionValue(50);
@@ -21,16 +23,29 @@ export default function MouseInteractiveBackground() {
   const orb2OffsetX = useTransform(smoothMouseX, (v: number) => (v - orb2X) * -0.3);
   const orb2OffsetY = useTransform(smoothMouseY, (v: number) => (v - orb2Y) * -0.3);
 
-  const particlesRef = useRef(
-    Array.from({ length: 20 }).map((_, i) => ({
-      id: i,
-      initialX: Math.random() * 100,
-      initialY: Math.random() * 100,
-      duration: 3 + Math.random() * 4,
-      delay: Math.random() * 5,
-      offsetMultiplier: 0.8 + Math.random() * 0.7,
-    }))
-  );
+  const [particles, setParticles] = useState<
+    Array<{
+      id: number;
+      initialX: number;
+      initialY: number;
+      duration: number;
+      delay: number;
+      offsetMultiplier: number;
+    }>
+  >([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 20 }).map((_, i) => ({
+        id: i,
+        initialX: Math.random() * 100,
+        initialY: Math.random() * 100,
+        duration: 3 + Math.random() * 4,
+        delay: Math.random() * 5,
+        offsetMultiplier: 0.8 + Math.random() * 0.7,
+      }))
+    );
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -109,14 +124,10 @@ export default function MouseInteractiveBackground() {
           ease: 'easeInOut',
         }}
       >
-        <img
-          src="/src/assets/skyrim-logo-silver.svg"
-          alt=""
-          className="w-[800px] h-[800px] object-contain"
-        />
+        <img src={skyrimLogo.src} alt="" className="w-[800px] h-[800px] object-contain" />
       </motion.div>
 
-      {particlesRef.current.map((particle) => (
+      {particles.map((particle) => (
         <FloatingParticle
           key={particle.id}
           particle={particle}
