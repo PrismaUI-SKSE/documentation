@@ -1,0 +1,136 @@
+---
+import Hero from '../components/landing/hero';
+import TrustUs from '../components/landing/trust-us';
+import BentoGrid from '../components/landing/bento-grid';
+import VideoDemo from '../components/landing/video-demo';
+import CodeShowcase from '../components/landing/code-showcase';
+import Footer from '../components/landing/footer';
+import MobileMenu from '../components/landing/mobile-menu';
+import '@fontsource/geist-sans';
+import '@fontsource/geist-mono';
+import '../styles/global.css';
+
+const title = 'Prisma UI - Skyrim Next-Gen Web UI Framework';
+const description =
+  'Revolutionary web UI framework for Skyrim modding. Create beautiful, modern user interfaces with HTML, CSS, JavaScript, React, Vue and other web technologies.';
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://prismaui.dev" />
+    <meta property="og:site_name" content="Prisma UI" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- SEO -->
+    <meta
+      name="keywords"
+      content="Skyrim UI framework, Skyrim modding, web UI, HTML CSS JavaScript, React Vue Skyrim, SKSE plugin, game UI development, WebKit Skyrim, modern game interface"
+    />
+    <meta name="author" content="StarkMP" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <link rel="canonical" href="https://prismaui.dev/" />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Fonts -->
+    <style>
+      body {
+        font-family:
+          'Geist Sans',
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+      code,
+      pre {
+        font-family: 'Geist Mono', monospace;
+      }
+    </style>
+  </head>
+  <body class="bg-black text-white antialiased">
+    <!-- Custom Navigation -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-zinc-900"
+    >
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="/" class="flex items-center gap-3 group">
+          <img src="/src/assets/brand-logo.svg" alt="Prisma UI" class="h-8 w-auto" />
+        </a>
+
+        {/* Desktop Navigation */}
+        <div class="hidden md:flex items-center gap-6">
+          <a
+            href="/getting-started/introduction/"
+            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
+          >
+            Documentation
+          </a>
+          <a
+            href="/api/create-view/"
+            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
+          >
+            API
+          </a>
+          <a
+            href="https://github.com/PrismaUI-SKSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://discord.gg/bawdketrFX"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-sm font-semibold hover:shadow-lg hover:shadow-blue-500/20 transition-all"
+          >
+            Join Discord
+          </a>
+        </div>
+
+        {/* Mobile Menu */}
+        <MobileMenu client:load />
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+      <Hero client:load client:only="react" />
+      <TrustUs client:load client:only="react" />
+      <VideoDemo client:load />
+      <CodeShowcase client:load client:only={true} />
+      <BentoGrid client:load />
+    </main>
+
+    <!-- Footer -->
+    <Footer client:load />
+
+    <!-- Analytics -->
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+  </body>
+</html>
