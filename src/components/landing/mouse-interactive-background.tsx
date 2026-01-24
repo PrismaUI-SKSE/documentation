@@ -113,10 +113,9 @@ export default function MouseInteractiveBackground() {
       />
 
       <motion.div
-        className="absolute inset-0 flex items-center justify-center opacity-5"
+        className="absolute inset-0 flex items-center justify-center opacity-[0.06]"
         animate={{
           scale: [1, 1.05, 1],
-          opacity: [0.05, 0.08, 0.05],
         }}
         transition={{
           duration: 6,
