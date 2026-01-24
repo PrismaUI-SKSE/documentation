@@ -3,6 +3,7 @@ title: Focus
 description: Sets input focus to the specified PrismaView and shows the cursor
 sidebar:
   order: 5
+  badge: UPDATED
 ---
 
 import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
@@ -18,7 +19,7 @@ When using the `pauseGame` parameter, ensure your plugin properly handles game p
 ## Syntax
 
 ```cpp
-bool Focus(PrismaView view, bool pauseGame = false);
+bool Focus(PrismaView view, bool pauseGame = false, bool disableFocusMenu = false);
 ```
 
 ## Parameters
@@ -31,6 +32,11 @@ bool Focus(PrismaView view, bool pauseGame = false);
 - **Type:** `bool`
 - **Default:** `false`
 - **Description:** Optional parameter to pause the game when focus is active
+
+### `disableFocusMenu` (optional)
+- **Type:** `bool`
+- **Default:** `false`
+- **Description:** If `true`, sets focus without activating the FocusMenu overlay. Available since 1.2.0.
 
 ## Return Value
 
@@ -67,6 +73,20 @@ if (success) {
 ```
 
 </TabItem>
+
+<TabItem label="Focus without FocusMenu">
+
+```cpp
+// Focus without showing FocusMenu overlay
+bool success = PrismaUI->Focus(view, false, true);
+if (success) {
+    SKSE::log::info("View focused without FocusMenu");
+} else {
+    SKSE::log::error("Failed to focus view");
+}
+```
+
+</TabItem>
 </Tabs>
 
 ## Best Practices
@@ -76,6 +96,7 @@ Always provide visual feedback when focus changes occur. Consider showing/hiding
 </Aside>
 
 - **Game Pause Management:** Use `pauseGame = true` for menus that require full user attention
+- **FocusMenu Control:** Use `disableFocusMenu = true` when you want focus without the overlay menu
 - **Focus Pairing:** Always pair `Focus` calls with corresponding `Unfocus` calls
 
 ## Common Issues

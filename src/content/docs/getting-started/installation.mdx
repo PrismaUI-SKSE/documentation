@@ -4,29 +4,37 @@ sidebar:
   order: 2
 ---
 
-import { Steps, Card, CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
+import { Steps, Card, CardGrid, LinkCard, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 import { VersionSelector } from '@/components/version-selector';
 
 ### Requirements
 
 <Steps>
-  1. Windows 10/11
-  2. DirectX 11
-  3. Skyrim Special Edition (Supports SE and AE)
-  4. [Skyrim Script Extender (SKSE)](https://www.nexusmods.com/skyrimspecialedition/mods/30379)
-  5. [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444)
-  6. [Keyboard Shortcuts Fix](https://www.nexusmods.com/skyrimspecialedition/mods/3620) to enable keyboard input
-  7. Mostly recommended to use [Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194)
+  1. Skyrim Special Edition (supports SE and AE)
+  2. [Skyrim Script Extender (SKSE)](https://www.nexusmods.com/skyrimspecialedition/mods/30379)
+  3. [Address Library for SKSE Plugins](https://www.nexusmods.com/skyrimspecialedition/mods/32444)
+  4. [Keyboard Shortcuts Fix](https://www.nexusmods.com/skyrimspecialedition/mods/3620) to enable keyboard input
 </Steps>
 
 ### Installation
 
-<Steps>
-  1. <VersionSelector client:load />
-  2. Put all files from `PUT FILES IN SKYRIM FOLDER` folder to Skyrim folder
-  3. Install all archives from `INSTALL WITH MO2` folder with Mod Organizer 2
-  4. If you are a developer, then check `API HEADER FILE` folder, it contains C++ header API file which you can use in your SKSE Plugin (see [Basic Usage](/getting-started/basic-usage/)). Also you could work with `debug` version of Prisma UI (it contains in `DEBUG VERSION` folder).
-</Steps>
+<Tabs>
+  <TabItem label="Latest Version">
+    <Steps>
+      1. <VersionSelector client:load />
+      2. Install the Prisma UI archive using your mod manager or manually to the `Skyrim/Data/` folder.
+      3. OPTIONAL: If you are a developer then download the [PrismaUI_API.h](https://github.com/PrismaUI-SKSE/PrismaUI/releases) header file for your own plugin.
+    </Steps>
+  </TabItem>
+  <TabItem label="1.1.0 and below">
+    <Steps>
+      1. <VersionSelector client:load />
+      2. Put all files from `PUT FILES IN SKYRIM FOLDER` folder to your Skyrim game root directory
+      3. Install all archives from `INSTALL WITH MO2` folder with your mod manager (Mod Organizer 2 or Vortex)
+      4. If you are a developer, check `API HEADER FILE` folder for C++ header API file (see [Basic Usage](/getting-started/basic-usage/)). Debug version is available in `DEBUG VERSION` folder.
+    </Steps>
+  </TabItem>
+</Tabs>
 
 ### Log File Location
 

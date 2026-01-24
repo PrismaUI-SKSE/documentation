@@ -199,6 +199,10 @@ export default defineConfig({
           autogenerate: { directory: 'api' },
         },
         {
+          label: 'Inspector API (Beta)',
+          autogenerate: { directory: 'inspector-api' },
+        },
+        {
           label: 'Configuration',
           autogenerate: { directory: 'configuration' },
         },
@@ -213,6 +217,7 @@ export default defineConfig({
         ThemeSelect: './src/components/starlight/null.astro',
         ThemeProvider: './src/components/starlight/theme-provider.astro',
         LanguageSelect: './src/components/starlight/null.astro',
+        Footer: './src/components/starlight/footer.astro',
       },
     }),
     react(),

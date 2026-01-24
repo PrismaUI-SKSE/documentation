@@ -1,0 +1,68 @@
+---
+title: SetInspectorBounds
+description: Sets the position and size of the inspector window
+sidebar:
+  order: 4
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.2.0** version.
+</Aside>
+
+## Overview
+
+Sets the position and size of the inspector window. This allows you to customize where the debugging tools appear on the screen.
+
+## Syntax
+
+```cpp
+void SetInspectorBounds(
+    PrismaView view, 
+    float topLeftX, 
+    float topLeftY, 
+    unsigned int width, 
+    unsigned int height
+);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` associated with the inspector
+
+### `topLeftX` (required)
+- **Type:** `float`
+- **Description:** The X coordinate of the top-left corner
+
+### `topLeftY` (required)
+- **Type:** `float`
+- **Description:** The Y coordinate of the top-left corner
+
+### `width` (required)
+- **Type:** `unsigned int`
+- **Description:** The width of the inspector window in pixels
+
+### `height` (required)
+- **Type:** `unsigned int`
+- **Description:** The height of the inspector window in pixels
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Set inspector position and size
+PrismaUI->SetInspectorBounds(view, 50.0f, 50.0f, 800, 600);
+```
+
+</TabItem>
+</Tabs>

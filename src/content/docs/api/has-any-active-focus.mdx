@@ -1,0 +1,85 @@
+---
+title: HasAnyActiveFocus
+description: Checks if any PrismaView has active input focus
+sidebar:
+  order: 17
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.2.0** version.
+</Aside>
+
+## Overview
+
+Returns `true` if any `PrismaView` currently has active input focus. This is a global check useful for determining if any UI element is currently receiving input across all views.
+
+<Aside type="tip" title="Global Focus Check">
+Use this method to implement global input management, pause/resume game logic, or coordinate focus between multiple plugins.
+</Aside>
+
+## Syntax
+
+```cpp
+bool HasAnyActiveFocus();
+```
+
+## Parameters
+
+None.
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if any view has active focus; otherwise, `false`
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Global Check">
+
+```cpp
+// Check if any UI has focus
+if (PrismaUI->HasAnyActiveFocus()) {
+    SKSE::log::info("Some UI element has active focus");
+} else {
+    SKSE::log::info("No UI elements have focus");
+}
+```
+
+</TabItem>
+<TabItem label="Game Pause Logic">
+
+```cpp
+// Use for global game pause management
+void UpdateGameState() {
+    if (PrismaUI->HasAnyActiveFocus()) {
+        // Any UI is active - pause game logic if needed
+        PauseNonUIGameplay();
+    } else {
+        // No UI active - resume normal gameplay
+        ResumeGameplay();
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Input Coordination">
+Perfect for multi-plugin environments where multiple UIs need to coordinate input handling without direct communication.
+</Aside>
+
+- **Global State Check:** Use before performing operations that should only occur when no UI is focused
+- **Performance:** Lightweight operation suitable for frequent checks
+- **Multi-Plugin:** Essential for cross-plugin input coordination
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+This method checks **all** views globally. Ensure your plugin logic accounts for focus set by other plugins.
+</Aside>

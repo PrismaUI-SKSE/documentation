@@ -1,0 +1,48 @@
+---
+title: IsInspectorVisible
+description: Checks if the inspector is currently visible
+sidebar:
+  order: 3
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.2.0** version.
+</Aside>
+
+## Overview
+
+Returns `true` if the inspector overlay is currently visible for the specified `PrismaView`.
+
+## Syntax
+
+```cpp
+bool IsInspectorVisible(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` to check
+
+## Return Value
+
+- **Type:** `bool`
+- **Returns:** `true` if the inspector is visible; otherwise, `false`
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Toggle Inspector">
+
+```cpp
+// Toggle inspector visibility
+bool isVisible = PrismaUI->IsInspectorVisible(view);
+PrismaUI->SetInspectorVisibility(view, !isVisible);
+```
+
+</TabItem>
+</Tabs>

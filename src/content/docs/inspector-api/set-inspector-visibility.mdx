@@ -1,0 +1,58 @@
+---
+title: SetInspectorVisibility
+description: Shows or hides the inspector overlay
+sidebar:
+  order: 2
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.2.0** version.
+</Aside>
+
+## Overview
+
+Shows or hides the inspector overlay for a specific `PrismaView`. This allows you to toggle the visibility of the debugging tools without destroying the inspector instance.
+
+## Syntax
+
+```cpp
+void SetInspectorVisibility(PrismaView view, bool visible);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` associated with the inspector
+
+### `visible` (required)
+- **Type:** `bool`
+- **Description:** `true` to show the inspector, `false` to hide it
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Show Inspector">
+
+```cpp
+// Show the inspector
+PrismaUI->SetInspectorVisibility(view, true);
+```
+
+</TabItem>
+<TabItem label="Hide Inspector">
+
+```cpp
+// Hide the inspector
+PrismaUI->SetInspectorVisibility(view, false);
+```
+
+</TabItem>
+</Tabs>

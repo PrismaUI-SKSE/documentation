@@ -1,0 +1,54 @@
+---
+title: CreateInspectorView
+description: Creates an inspector view for debugging a PrismaView
+sidebar:
+  order: 1
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.2.0** version.
+</Aside>
+
+## Overview
+
+Creates an inspector view for debugging the specified `PrismaView`. This tool is essential for inspecting the DOM, styles, and console output of your UI within the game environment.
+
+<Aside type="tip" title="Debugging">
+Use the inspector to troubleshoot layout issues, check CSS application, and monitor JavaScript console logs in real-time.
+</Aside>
+
+## Syntax
+
+```cpp
+void CreateInspectorView(PrismaView view);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` for which to create the inspector
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+// Create inspector for the view
+PrismaUI->CreateInspectorView(view);
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+- **Development Only:** It is recommended to enable the inspector only during development or via a debug configuration option.
