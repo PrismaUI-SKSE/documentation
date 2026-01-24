@@ -32,7 +32,7 @@ const versions: Version[] = [
     version: '1.2.0',
     badge: {
       label: 'Pre-release',
-      className: 'text-green-500 border-orange-500',
+      className: 'text-orange-500 border-orange-500',
     },
     url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.0-rc/PrismaUI_1.2.0.zip',
   },
