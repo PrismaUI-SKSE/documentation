@@ -20,7 +20,7 @@ const features = [
   },
   {
     title: 'DirectX 11 Integration',
-    description: 'Native DirectX 11 rendering for seamless integration with Skyrim graphics',
+    description: 'Native DirectX 11 rendering for seamless integration with Skyrim as overlay',
     icon: '🎮',
     gradient: 'from-emerald-500/10 to-teal-500/10',
     border: 'hover:border-emerald-500/50',
@@ -34,7 +34,7 @@ const features = [
   },
   {
     title: 'Developer Friendly',
-    description: 'Hot reload, modern dev tools, and browser-based development workflow',
+    description: 'Modern dev tools, and browser-based development workflow',
     icon: '🔧',
     gradient: 'from-violet-500/10 to-indigo-500/10',
     border: 'hover:border-violet-500/50',

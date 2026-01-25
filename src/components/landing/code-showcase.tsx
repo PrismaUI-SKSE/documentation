@@ -39,7 +39,7 @@ function castFireball() {
 };
 
 export default function CodeShowcase() {
-  const [activeTab, setActiveTab] = useState<'cpp' | 'html'>('cpp');
+  const [activeTab, setActiveTab] = useState<'cpp' | 'html'>('html');
 
   return (
     <section className="relative py-32 bg-gradient-to-b from-black via-zinc-950 to-black overflow-hidden">
@@ -74,17 +74,6 @@ export default function CodeShowcase() {
           {/* Tab Buttons */}
           <div className="flex gap-4 mb-6">
             <motion.button
-              onClick={() => setActiveTab('cpp')}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
-                activeTab === 'cpp'
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/20'
-                  : 'bg-zinc-900/50 text-zinc-400 hover:text-white border border-zinc-800'
-              }`}
-              whileTap={{ scale: 0.95 }}
-            >
-              C++ (SKSE Plugin)
-            </motion.button>
-            <motion.button
               onClick={() => setActiveTab('html')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
                 activeTab === 'html'
@@ -94,6 +83,17 @@ export default function CodeShowcase() {
               whileTap={{ scale: 0.95 }}
             >
               HTML/JavaScript
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveTab('cpp')}
+              className={`px-6 py-3 rounded-xl font-semibold transition-all cursor-pointer ${
+                activeTab === 'cpp'
+                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/20'
+                  : 'bg-zinc-900/50 text-zinc-400 hover:text-white border border-zinc-800'
+              }`}
+              whileTap={{ scale: 0.95 }}
+            >
+              C++ (SKSE Plugin)
             </motion.button>
           </div>
 
