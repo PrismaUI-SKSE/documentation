@@ -98,6 +98,9 @@ void InitializeUI() {
     view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) -> void {
         SKSE::log::info("View DOM is ready {}", view);
 
+        // Focus the view
+        PrismaUI->Focus(view);
+
         // Initialize the UI with game data
         PrismaUI->Invoke(view, "updatePlayerStatus('Ready for adventure!')");
         
@@ -117,6 +120,10 @@ void InitializeUI() {
         } else if (action == "save_game") {
             // Implement save game logic
             SKSE::log::info("Saving game...");
+        } else if (action == "unfocus_menu") {
+            // Unfocus the menu
+            SKSE::log::info("Unfocusing menu...");
+            PrismaUI->Unfocus(view);
         }
     });
 
@@ -182,6 +189,9 @@ Create your HTML file at `Skyrim/Data/PrismaUI/views/MyPlugin/index.html`:
                 <button onclick="refreshData()" class="action-btn refresh-btn">
                     Refresh Data
                 </button>
+                <button onclick="unfocusMenu()" class="action-btn unfocus-btn">
+                    Unfocus Menu
+                </button>
             </section>
 
             <section class="communication-test">
@@ -212,7 +222,7 @@ Create your HTML file at `Skyrim/Data/PrismaUI/views/MyPlugin/index.html`:
 }
 
 body {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: transparent;
     color: #ffffff;
     min-height: 100vh;
     padding: 20px;
@@ -327,6 +337,10 @@ section h2 {
     background: linear-gradient(45deg, #4ecdc4 0%, #44a08d 100%);
 }
 
+.unfocus-btn {
+    background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+}
+
 .communication-test {
     display: grid;
     gap: 12px;
@@ -403,6 +417,11 @@ function performAction(action) {
 function refreshData() {
     window.requestPlayerData('refresh');
     addResponse('Data refresh requested');
+}
+
+function unfocusMenu() {
+    window.onPlayerAction('unfocus_menu');
+    addResponse('Unfocus menu requested');
 }
 
 function sendTestData() {
