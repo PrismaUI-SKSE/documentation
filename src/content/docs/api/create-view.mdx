@@ -128,6 +128,10 @@ Skyrim/
 Use the `onDomReadyCallback` to ensure your JavaScript code executes only after the DOM is fully loaded. This prevents errors when trying to access DOM elements that haven't been created yet.
 </Aside>
 
+<Aside type="caution" title="Keep Assets Locally">
+Always load assets (fonts, images, etc.) **locally** from your plugin's directory, not from the internet. Loading remote assets creates a dependency on network connectivity and can severely degrade user experience if the connection is slow or unavailable. Bundle all required assets with your mod.
+</Aside>
+
 - **Single Instance:** Always create only one `PrismaView` per plugin
 - **DOM Ready:** Use the callback to initialize your UI state safely
 - **View Management:** Store the returned `PrismaView` instance for later use with other API methods

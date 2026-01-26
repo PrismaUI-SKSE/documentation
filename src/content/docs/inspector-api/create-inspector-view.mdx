@@ -44,10 +44,20 @@ This method returns `void`.
 ```cpp
 // Create inspector for the view
 PrismaUI->CreateInspectorView(view);
+
+// Set position and size
+PrismaUI->SetInspectorBounds(view, 100.0f, 100.0f, 800, 600);
+
+// Make inspector visible
+PrismaUI->SetInspectorVisibility(view, true);
 ```
 
 </TabItem>
 </Tabs>
+
+<Aside type="caution" title="First Load Performance">
+The inspector may take up to **~5 seconds** to fully load when opened for the first time.
+</Aside>
 
 ## Best Practices
 
