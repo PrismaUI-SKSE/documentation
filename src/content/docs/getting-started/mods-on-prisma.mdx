@@ -5,34 +5,11 @@ sidebar:
 ---
 
 import { Badge } from '@astrojs/starlight/components';
+import { MODS_USING_PRISMA } from '@/constants';
 
 ---
-
-export const mods = [
-  {
-    name: 'Skyrim True Believer (STB)',
-    url: 'https://skytb.ru/'
-  },
-  {
-    name: 'TK Dodge Redux',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/160098'
-  },
-  {
-    name: 'STB Markers Control',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/161110'
-  },
-  {
-    name: 'Prisma Mod Configuration Manager - PMCM',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/168551'
-  },
-  {
-    name: 'Modern Floating Damage',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/170076'
-  },
-];
-
 <ul>
-  {mods.map((mod) => (
+  {MODS_USING_PRISMA.map((mod) => (
     <li key={mod.url}>
       <a href={mod.url} target="_blank" rel="noopener noreferrer">
         {mod.name}

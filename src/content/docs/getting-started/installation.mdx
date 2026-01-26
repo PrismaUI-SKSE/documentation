@@ -6,6 +6,7 @@ sidebar:
 
 import { Steps, Card, CardGrid, LinkCard, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 import { VersionSelector } from '@/components/version-selector';
+import { NexusLink } from '@/components/nexus-link'
 
 ### Requirements
 
@@ -20,11 +21,14 @@ import { VersionSelector } from '@/components/version-selector';
 
 <Tabs>
   <TabItem label="1.2.0 and above">
-    <Steps>
-      1. <VersionSelector client:load />
-      2. Install the Prisma UI archive using your mod manager or manually to the `Skyrim/Data/` folder.
-      3. OPTIONAL: If you are a developer then download the [PrismaUI_API.h](https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.0/PrismaUI_API.h) header file for your own plugin.
-    </Steps>
+    <div className='flex flex-col gap-5'>
+      <Steps>
+        1. <VersionSelector client:load />
+        2. Install the Prisma UI archive using your mod manager or manually to the `Skyrim/Data/` folder.
+        3. OPTIONAL: If you are a developer then download the [PrismaUI_API.h](https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.0/PrismaUI_API.h) header file for your own plugin.
+      </Steps>
+      <NexusLink className='w-[200px]' />
+    </div>
   </TabItem>
   <TabItem label="1.1.0 and below">
     <Steps>

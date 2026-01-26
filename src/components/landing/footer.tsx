@@ -2,6 +2,8 @@
 
 import { motion } from 'motion/react';
 
+import { NexusLink } from '../nexus-link';
+
 export default function Footer() {
   const links = {
     product: [
@@ -44,10 +46,11 @@ export default function Footer() {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent mb-4">
               Prisma UI
             </h3>
-            <p className="text-zinc-500 text-sm leading-relaxed mb-6">
+            <p className="text-zinc-500 text-sm leading-relaxed mb-4">
               Revolutionary web UI framework for Skyrim modding. Create beautiful, modern interfaces
               with web technologies.
             </p>
+            <NexusLink className="w-[160px] mb-4" />
             <div className="flex gap-4">
               <motion.a
                 href="https://github.com/PrismaUI-SKSE"

@@ -3,34 +3,7 @@
 import { motion } from 'motion/react';
 
 import { Marquee } from '@/components/ui/marquee';
-
-const mods = [
-  {
-    name: 'Modern Floating Damage',
-    image: '/trust-us-previews/modern-floating-damage.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/170076',
-  },
-  {
-    name: 'PMCM',
-    image: '/trust-us-previews/pmcm.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/168551',
-  },
-  {
-    name: 'STB Markers Control',
-    image: '/trust-us-previews/stb-markers-control.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/161110',
-  },
-  {
-    name: 'Skyrim True Believer',
-    image: '/trust-us-previews/stb.png',
-    url: 'https://skytb.ru/',
-  },
-  {
-    name: 'TK Dodge Redux',
-    image: '/trust-us-previews/tk-dodge-redux.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/160098',
-  },
-];
+import { MODS_USING_PRISMA } from '@/constants';
 
 export default function TrustUs() {
   return (
@@ -64,7 +37,7 @@ export default function TrustUs() {
 
         {/* Marquee Track */}
         <Marquee className="[--duration:110s] [--gap:2rem]" pauseOnHover>
-          {mods.map((mod, index) => (
+          {MODS_USING_PRISMA.map((mod, index) => (
             <a
               key={`${mod.name}-${index}`}
               href={mod.url}
