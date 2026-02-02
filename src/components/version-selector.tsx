@@ -21,11 +21,15 @@ type Version = {
 
 const versions: Version[] = [
   {
-    version: '1.2.2',
+    version: '1.3.0',
     badge: {
       label: 'Latest',
       className: 'text-green-500 border-green-500',
     },
+    url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.3.0/PrismaUI_1.3.0.zip',
+  },
+  {
+    version: '1.2.2',
     url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.2/PrismaUI_1.2.2.zip',
   },
   {

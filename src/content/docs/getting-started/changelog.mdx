@@ -7,18 +7,22 @@ sidebar:
 import { Badge } from '@astrojs/starlight/components';
 
 ---
-## Version 1.2.2 <Badge text="Latest" variant="success" />
+## Version 1.3.0 <Badge text="Latest" variant="success" />
+
+[Download](https://github.com/PrismaUI-SKSE/framework/releases/download/1.3.0/PrismaUI_1.3.0.zip)
+
+- Added copy-paste support for text inputs
+- Fixed prison crash issue
+- Fixed issue where domReadyCallback was being called twice
+
+---
+## Version 1.2.2
 
 [Download](https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.2/PrismaUI_1.2.2.zip)
-
-### New Features
 
 - Added Ultralight Inspector (Beta) with new API methods
 - Added new argument `disableFocusMenu` to Focus method to disable FocusMenu when focusing
 - Added new API method `HasAnyActiveFocus` to check if any focus is active
-
-### Improvements
-
 - Added dynamic DLL loading (now you shouldn't put files in skyrim root directory)
 - Migrated to CMake project configuration (xmake is removed)
 - Reworked project building flow
@@ -29,19 +33,11 @@ import { Badge } from '@astrojs/starlight/components';
 
 [Download](https://github.com/PrismaUI-SKSE/framework/releases/download/1.1.0/PrismaUI_1_1_0.zip)
 
-### New Features
-
-- **Visibility Management**
-  - Added new API method `Hide` to disable view visibility
-  - Added new API method `Show` to enable view visibility
-  - Added new API method `IsHidden` to check if view visibility is disabled
-
-- **Rendering Order Management**
-  - Added new API method `GetOrder` to get view rendering order
-  - Added new API method `SetOrder` to set view rendering order
-
-### Improvements
-
+- Added new API method `Hide` to disable view visibility
+- Added new API method `Show` to enable view visibility
+- Added new API method `IsHidden` to check if view visibility is disabled
+- Added new API method `GetOrder` to get view rendering order
+- Added new API method `SetOrder` to set view rendering order
 - Moved all API callbacks execution environment to the main thread
 - Added views tasks queue which fixes API methods execution conflicts
 - Upgraded [Ultralight](https://ultralig.ht/) version to `1.4.1-dev`:
@@ -56,8 +52,6 @@ import { Badge } from '@astrojs/starlight/components';
 ## Version 1.0.0
 
 [Download](https://github.com/PrismaUI-SKSE/framework/releases/download/1.0.0/PrismaUI_1_0_0.zip)
-
-### Changes
 
 - Migrated from `std` to native **C types** at plugin API
 - Added new method `InteropCall` for performance friendly high-load JS calling
