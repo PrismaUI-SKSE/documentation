@@ -10,9 +10,19 @@ export const MODS_USING_PRISMA = [
     url: 'https://www.nexusmods.com/skyrimspecialedition/mods/168551',
   },
   {
+    name: 'Heart of Magic - Spell Learning System',
+    image: '/trust-us-previews/heart-of-magic.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/171146',
+  },
+  {
     name: 'True Flasks NG',
     image: '/trust-us-previews/true-flasks-ng.png',
     url: 'https://www.nexusmods.com/skyrimspecialedition/mods/170374',
+  },
+  {
+    name: 'ChatBox',
+    image: '/trust-us-previews/chatbox.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/169429',
   },
   {
     name: 'STB Markers Control',

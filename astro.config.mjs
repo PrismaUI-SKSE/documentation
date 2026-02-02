@@ -184,8 +184,8 @@ export default defineConfig({
         },
       },
       logo: {
-        light: './src/assets/brand-logo.svg',
-        dark: './src/assets/brand-logo.svg',
+        light: './src/assets/brand-logo-gray.svg',
+        dark: './src/assets/brand-logo-gray.svg',
         replacesTitle: true,
       },
       customCss: ['./src/styles/global.css'],
