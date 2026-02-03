@@ -32,14 +32,14 @@ const versions: Version[] = [
     version: '1.2.2',
     url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.2.2/PrismaUI_1.2.2.zip',
   },
-  {
-    version: '1.1.0',
-    url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.1.0/PrismaUI_1_1_0.zip',
-  },
-  {
-    version: '1.0.0',
-    url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.0.0/PrismaUI_1_0_0.zip',
-  },
+  // {
+  //   version: '1.1.0',
+  //   url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.1.0/PrismaUI_1_1_0.zip',
+  // },
+  // {
+  //   version: '1.0.0',
+  //   url: 'https://github.com/PrismaUI-SKSE/framework/releases/download/1.0.0/PrismaUI_1_0_0.zip',
+  // },
 ];
 
 export const VersionSelector = () => (
