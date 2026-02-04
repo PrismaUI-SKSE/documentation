@@ -5,6 +5,7 @@ import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 import starlightThemeNext from 'starlight-theme-next';
+import mermaid from 'astro-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
@@ -221,6 +222,7 @@ export default defineConfig({
       },
     }),
     react(),
+    mermaid(),
   ],
   vite: {
     plugins: [tailwindcss()],
