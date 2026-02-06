@@ -13,6 +13,7 @@ sidebar:
 - UI refresh rate has **60 FPS** cap for now.
 - **CPU** rendering is only available for now.
 - If you use [TailwindCSS](https://tailwindcss.com/) in your UI then use [v3](https://v3.tailwindcss.com/).
+- Avoid using heavy CSS operations like shadows/filters/gradients/blur in large amount for now. CPU rendering struggles with these, leading to potential FPS drops. We plan to add [GPU rendering](/getting-started/planned-features) in the future.
 - JS event `contextmenu` doesn't work. Use this implementation instead:
   ```ts
   window.addEventListener('mousedown', function (event) {
