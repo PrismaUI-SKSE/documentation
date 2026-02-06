@@ -14,6 +14,12 @@ import '../styles/global.css';
 const title = 'Prisma UI - Skyrim Next-Gen Web UI Framework';
 const description =
   'Revolutionary web UI framework for Skyrim modding. Create beautiful, modern user interfaces with HTML, CSS, JavaScript, React, Vue and other web technologies.';
+const navLinks = [
+  { label: 'Documentation', href: '/getting-started/introduction/' },
+  { label: 'API', href: '/api/create-view/' },
+  { label: 'Github', href: 'https://github.com/PrismaUI-SKSE' },
+  { label: 'Nexus Mods', href: 'https://www.nexusmods.com/skyrimspecialedition/mods/148718' },
+];
 ---
 
 <!doctype html>
@@ -81,26 +87,17 @@ const description =
 
         {/* Desktop Navigation */}
         <div class="hidden md:flex items-center gap-6">
-          <a
-            href="/getting-started/introduction/"
-            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
-          >
-            Documentation
-          </a>
-          <a
-            href="/api/create-view/"
-            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
-          >
-            API
-          </a>
-          <a
-            href="https://github.com/PrismaUI-SKSE"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
-          >
-            GitHub
-          </a>
+          {
+            navLinks.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                class="text-zinc-400 hover:text-white transition-colors text-sm font-medium"
+              >
+                {link.label}
+              </a>
+            ))
+          }
           <a
             href="https://discord.gg/bawdketrFX"
             target="_blank"
