@@ -1,0 +1,99 @@
+---
+title: GetAPIVersion
+description: Returns the PrismaUI API version supported by the currently loaded DLL
+sidebar:
+  order: 18
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **API version 2**.
+</Aside>
+
+## Overview
+
+Returns the PrismaUI API version supported by the currently loaded DLL. Use this function to perform defensive checks before calling newer API methods such as [RegisterConsoleCallback](/api/register-console-callback), ensuring your plugin remains compatible with older PrismaUI releases.
+
+<Aside type="tip" title="Safe to Call Anytime">
+`GetAPIVersion` uses `GetProcAddress` internally and does not depend on vtable layout. It is safe to call regardless of which PrismaUI DLL version is loaded.
+</Aside>
+
+## Syntax
+
+```cpp
+uint32_t PRISMA_UI_API::GetAPIVersion();
+```
+
+## Parameters
+
+This function takes no parameters.
+
+## Return Value
+
+Returns a `uint32_t` indicating the API version:
+
+| Value | Meaning |
+|-------|---------|
+| `0`   | PrismaUI DLL is not loaded |
+| `1`   | Original API — does **not** have `RegisterConsoleCallback` |
+| `2+`  | Has `RegisterConsoleCallback` and newer methods |
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Version Check">
+
+```cpp
+uint32_t version = PRISMA_UI_API::GetAPIVersion();
+logger::info("PrismaUI API version: {}", version);
+```
+
+</TabItem>
+<TabItem label="Conditional API Usage">
+
+```cpp
+auto apiVersion = PRISMA_UI_API::GetAPIVersion();
+
+if (apiVersion >= 2) {
+    // Safe to use RegisterConsoleCallback
+    g_prismaUI->RegisterConsoleCallback(view, OnConsoleMessage);
+    logger::info("Console callback registered");
+} else {
+    logger::warn("PrismaUI API v{} — RegisterConsoleCallback requires v2+", apiVersion);
+}
+```
+
+</TabItem>
+</Tabs>
+
+## How It Works
+
+`GetAPIVersion` uses `GetProcAddress` to look up the `GetPrismaUIAPIVersion` export from `PrismaUI.dll`. If the export does not exist (older DLL without this export), it returns `1`, indicating the original API. This avoids any vtable dependency and is safe to call regardless of which DLL version is loaded.
+
+## Version History
+
+| API Version | Added |
+|-------------|-------|
+| 1 | Original API (`CreateView` through `HasAnyActiveFocus`) |
+| 2 | [RegisterConsoleCallback](/api/register-console-callback) |
+
+## Best Practices
+
+<Aside type="tip" title="Compatibility">
+Always check the API version before calling methods introduced after the original release. This prevents crashes when users have an older PrismaUI DLL installed.
+</Aside>
+
+- **Check Early:** Call `GetAPIVersion` once during initialization and cache the result
+- **Graceful Degradation:** Provide fallback behavior when a required API version is not available
+- **Log the Version:** Log the detected API version at startup to aid in debugging user reports
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If `GetAPIVersion` returns unexpected values:
+- Verify that `PrismaUI.dll` is loaded before calling this function
+- A return value of `0` means the DLL is not loaded at all
+- A return value of `1` means the DLL is an older version without the version export
+- Ensure you are not calling this before SKSE has finished loading plugins
+</Aside>

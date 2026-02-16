@@ -1,0 +1,191 @@
+---
+title: RegisterConsoleCallback
+description: Registers a callback to receive JavaScript console messages from a PrismaView
+sidebar:
+  order: 19
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **API version 2**. Use [GetAPIVersion](/api/get-api-version) to verify support before calling this method.
+</Aside>
+
+## Overview
+
+Registers a callback to receive JavaScript console messages (`console.log`, `console.warn`, `console.error`, etc.) from a specific `PrismaView`. This hooks into Ultralight's native `OnAddConsoleMessage` listener, capturing not only explicit console calls but also uncaught exceptions, CSP violations, and other diagnostic events.
+
+<Aside type="tip" title="Debugging Aid">
+`RegisterConsoleCallback` is invaluable for debugging your web UI during development. Route JavaScript errors and warnings to your SKSE log to diagnose issues without needing a separate browser dev-tools session.
+</Aside>
+
+## Syntax
+
+```cpp
+void RegisterConsoleCallback(PrismaView view, ConsoleMessageCallback callback);
+```
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The view to listen to. Messages from other views or other plugins are not received.
+
+### `callback` (required)
+- **Type:** `ConsoleMessageCallback`
+- **Description:** Function pointer to receive console messages. Pass `nullptr` to unregister a previously registered callback.
+
+## Callback Signature
+
+```cpp
+typedef void (*ConsoleMessageCallback)(PrismaView view, ConsoleMessageLevel level, const char* message);
+```
+
+- **`view`** — The view that produced the message
+- **`level`** — The severity level of the message (see enum below)
+- **`message`** — The message text as a null-terminated UTF-8 string
+
+## ConsoleMessageLevel Enum
+
+```cpp
+enum class ConsoleMessageLevel : uint8_t {
+    Log = 0,    // console.log()
+    Warning,    // console.warn()
+    Error,      // console.error(), uncaught exceptions, CSP violations
+    Debug,      // console.debug()
+    Info        // console.info()
+};
+```
+
+## Return Value
+
+This method returns `void`.
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Basic Usage">
+
+```cpp
+void OnConsoleMessage(PrismaView view, PRISMA_UI_API::ConsoleMessageLevel level, const char* message) {
+    logger::info("[JS] {}", message);
+}
+
+// In OnDomReady:
+g_prismaUI->RegisterConsoleCallback(view, OnConsoleMessage);
+```
+
+```js
+// JavaScript — these messages will be received by the callback
+console.log("Hello from JS!");
+console.warn("Something might be wrong");
+console.error("Something went wrong!");
+```
+
+</TabItem>
+<TabItem label="Full Integration">
+
+```cpp
+#include "PrismaUI_API.h"
+
+PRISMA_UI_API::IVPrismaUI1* g_prismaUI = nullptr;
+PrismaView g_view = 0;
+
+// Console message handler with level-based routing
+void OnConsoleMessage(PrismaView view, PRISMA_UI_API::ConsoleMessageLevel level, const char* message) {
+    switch (level) {
+        case PRISMA_UI_API::ConsoleMessageLevel::Error:
+            logger::error("[JS Error] View {}: {}", view, message);
+            break;
+        case PRISMA_UI_API::ConsoleMessageLevel::Warning:
+            logger::warn("[JS Warn] View {}: {}", view, message);
+            break;
+        default:
+            logger::info("[JS] View {}: {}", view, message);
+            break;
+    }
+}
+
+void OnDomReady(PrismaView view) {
+    // Defensive version check before registering
+    auto apiVersion = PRISMA_UI_API::GetAPIVersion();
+    if (apiVersion >= 2) {
+        g_prismaUI->RegisterConsoleCallback(view, OnConsoleMessage);
+        logger::info("Console callback registered for view {}", view);
+    } else {
+        logger::warn("PrismaUI API v{} — RegisterConsoleCallback requires v2+", apiVersion);
+    }
+}
+
+void SetupUI() {
+    g_prismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(
+        PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1));
+
+    if (g_prismaUI) {
+        g_view = g_prismaUI->CreateView("my_plugin/index.html", OnDomReady);
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Unregistering">
+
+```cpp
+// Pass nullptr to remove a previously registered callback
+void Cleanup() {
+    if (g_prismaUI && g_view) {
+        auto apiVersion = PRISMA_UI_API::GetAPIVersion();
+        if (apiVersion >= 2) {
+            g_prismaUI->RegisterConsoleCallback(g_view, nullptr);
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Threading
+
+<Aside type="caution" title="Thread Safety">
+The callback is always dispatched on the **game thread**.
+</Aside>
+
+The callback is dispatched on the **game thread** via `SKSE::GetTaskInterface()->AddTask()`, consistent with other PrismaUI callbacks like [RegisterJSListener](/api/register-js-listener) and `OnDomReadyCallback`. It is safe to call SKSE and RE functions from within the callback.
+
+## Scope
+
+Each view has its own isolated JavaScript context. Registering a console callback on your view only receives messages from **your** view. Other plugins using PrismaUI are not affected and their messages are not visible to your callback.
+
+## What It Catches
+
+Because this hooks into Ultralight's native `OnAddConsoleMessage` listener, it captures more than just explicit `console.*` calls:
+
+- `console.log()`, `console.warn()`, `console.error()`, `console.info()`, `console.debug()`
+- Uncaught JavaScript exceptions
+- `console.assert()` failures
+- CSP (Content Security Policy) violations
+- CSS/rendering warnings
+- Network errors from the view
+
+## Best Practices
+
+<Aside type="tip" title="Development Workflow">
+Register a console callback early in development to catch JavaScript errors as they happen. Route errors and warnings to your SKSE log for easy diagnosis.
+</Aside>
+
+- **Version Check:** Always use [GetAPIVersion](/api/get-api-version) before calling this method to support older PrismaUI releases
+- **Level Filtering:** Use the `ConsoleMessageLevel` enum to route messages to appropriate log levels
+- **Unregister on Cleanup:** Pass `nullptr` to unregister your callback when destroying or cleaning up your view
+- **Single Callback:** Each view supports one console callback at a time. Registering a new callback replaces the previous one.
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If your console callback doesn't fire:
+- Verify the view is valid using [IsValid](/api/is-valid) before registering
+- Ensure you are on API version 2+ by checking [GetAPIVersion](/api/get-api-version)
+- Confirm the callback is registered after the view is created (ideally in `OnDomReady`)
+- Check that your JavaScript code is actually executing in the target view
+- Remember that each view has an isolated context — you won't receive messages from other views
+</Aside>
