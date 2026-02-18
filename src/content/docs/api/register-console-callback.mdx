@@ -8,7 +8,7 @@ sidebar:
 import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
 
 <Aside type="note" title="Availability">
-Available since **API version 2**. Use [GetAPIVersion](/api/get-api-version) to verify support before calling this method.
+Available in **IVPrismaUI2**. Request via `PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI2>()`. Returns `nullptr` if the loaded PrismaUI DLL does not support this interface.
 </Aside>
 
 ## Overview
@@ -71,8 +71,11 @@ void OnConsoleMessage(PrismaView view, PRISMA_UI_API::ConsoleMessageLevel level,
     logger::info("[JS] {}", message);
 }
 
-// In OnDomReady:
-g_prismaUI->RegisterConsoleCallback(view, OnConsoleMessage);
+// Request V2 interface and register callback:
+auto* v2 = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI2>();
+if (v2) {
+    v2->RegisterConsoleCallback(view, OnConsoleMessage);
+}
 ```
 
 ```js
@@ -89,6 +92,7 @@ console.error("Something went wrong!");
 #include "PrismaUI_API.h"
 
 PRISMA_UI_API::IVPrismaUI1* g_prismaUI = nullptr;
+PRISMA_UI_API::IVPrismaUI2* g_prismaUIv2 = nullptr;
 PrismaView g_view = 0;
 
 // Console message handler with level-based routing
@@ -107,19 +111,16 @@ void OnConsoleMessage(PrismaView view, PRISMA_UI_API::ConsoleMessageLevel level,
 }
 
 void OnDomReady(PrismaView view) {
-    // Defensive version check before registering
-    auto apiVersion = PRISMA_UI_API::GetAPIVersion();
-    if (apiVersion >= 2) {
-        g_prismaUI->RegisterConsoleCallback(view, OnConsoleMessage);
+    // Register console callback if V2 interface is available
+    if (g_prismaUIv2) {
+        g_prismaUIv2->RegisterConsoleCallback(view, OnConsoleMessage);
         logger::info("Console callback registered for view {}", view);
-    } else {
-        logger::warn("PrismaUI API v{} — RegisterConsoleCallback requires v2+", apiVersion);
     }
 }
 
 void SetupUI() {
-    g_prismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(
-        PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1));
+    g_prismaUI = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI1>();
+    g_prismaUIv2 = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI2>();
 
     if (g_prismaUI) {
         g_view = g_prismaUI->CreateView("my_plugin/index.html", OnDomReady);
@@ -133,11 +134,8 @@ void SetupUI() {
 ```cpp
 // Pass nullptr to remove a previously registered callback
 void Cleanup() {
-    if (g_prismaUI && g_view) {
-        auto apiVersion = PRISMA_UI_API::GetAPIVersion();
-        if (apiVersion >= 2) {
-            g_prismaUI->RegisterConsoleCallback(g_view, nullptr);
-        }
+    if (g_prismaUIv2 && g_view) {
+        g_prismaUIv2->RegisterConsoleCallback(g_view, nullptr);
     }
 }
 ```
@@ -174,7 +172,7 @@ Because this hooks into Ultralight's native `OnAddConsoleMessage` listener, it c
 Register a console callback early in development to catch JavaScript errors as they happen. Route errors and warnings to your SKSE log for easy diagnosis.
 </Aside>
 
-- **Version Check:** Always use [GetAPIVersion](/api/get-api-version) before calling this method to support older PrismaUI releases
+- **Version Guard:** Always request `IVPrismaUI2` via `RequestPluginAPI<IVPrismaUI2>()` and check for `nullptr` before calling this method, to support older PrismaUI releases
 - **Level Filtering:** Use the `ConsoleMessageLevel` enum to route messages to appropriate log levels
 - **Unregister on Cleanup:** Pass `nullptr` to unregister your callback when destroying or cleaning up your view
 - **Single Callback:** Each view supports one console callback at a time. Registering a new callback replaces the previous one.
@@ -184,7 +182,7 @@ Register a console callback early in development to catch JavaScript errors as t
 <Aside type="caution" title="Troubleshooting">
 If your console callback doesn't fire:
 - Verify the view is valid using [IsValid](/api/is-valid) before registering
-- Ensure you are on API version 2+ by checking [GetAPIVersion](/api/get-api-version)
+- Ensure `RequestPluginAPI<IVPrismaUI2>()` returned a non-null pointer
 - Confirm the callback is registered after the view is created (ideally in `OnDomReady`)
 - Check that your JavaScript code is actually executing in the target view
 - Remember that each view has an isolated context — you won't receive messages from other views

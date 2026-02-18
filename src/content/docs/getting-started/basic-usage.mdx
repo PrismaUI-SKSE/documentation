@@ -47,9 +47,7 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
     switch (message->type) {
     case SKSE::MessagingInterface::kDataLoaded:
         // Initialize PrismaUI API when game data is loaded
-        PrismaUI = static_cast<PRISMA_UI_API::IVPrismaUI1*>(
-            PRISMA_UI_API::RequestPluginAPI(PRISMA_UI_API::InterfaceVersion::V1)
-        );
+        PrismaUI = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI1>();
 
         if (!PrismaUI) {
             SKSE::log::error("Failed to initialize PrismaUI API");
@@ -57,7 +55,7 @@ static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
         }
 
         SKSE::log::info("PrismaUI API initialized successfully");
-        
+
         // Initialize your UI here
         InitializeUI();
         break;
