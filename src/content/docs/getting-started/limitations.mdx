@@ -34,3 +34,88 @@ sidebar:
     }
   });
   ```
+- **Blocking specific keys from input**: To prevent certain keys (e.g., numpad keys) from adding content to focused inputs, you need to use a combination of `keydown` and `beforeinput` event listeners:
+
+  **React Example:**
+  ```tsx
+  import { useEffect } from 'react';
+
+  // Define keys you want to block (e.g., numpad keys)
+  const blockedKeys = [
+    { keyCode: 96 },  // Numpad 0
+    { keyCode: 97 },  // Numpad 1
+    { keyCode: 98 },  // Numpad 2
+    { keyCode: 99 },  // Numpad 3
+    { keyCode: 100 }, // Numpad 4
+    { keyCode: 101 }, // Numpad 5
+    { keyCode: 102 }, // Numpad 6
+    { keyCode: 103 }, // Numpad 7
+    { keyCode: 104 }, // Numpad 8
+    { keyCode: 105 }, // Numpad 9
+  ];
+
+  function MyComponent() {
+    useEffect(() => {
+      let lastKey: null | number = null;
+      
+      const handleKeyDown = (event: KeyboardEvent) => {
+        lastKey = event.keyCode;
+      };
+      
+      const handleBeforeInput = (event: InputEvent) => {
+        if (lastKey !== null && blockedKeys.some(k => k.keyCode === lastKey)) {
+          console.log("Blocked input:", { data: event.data, lastKey });
+          event.preventDefault();
+        }
+      };
+      
+      window.addEventListener("keydown", handleKeyDown, { capture: true });
+      window.addEventListener("beforeinput", handleBeforeInput, { capture: true });
+      
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown, { capture: true });
+        window.removeEventListener("beforeinput", handleBeforeInput, { capture: true });
+      };
+    }, []);
+
+    return <input type="text" placeholder="Type here..." />;
+  }
+  ```
+
+  **Vanilla JavaScript Example:**
+  ```js
+  // Define keys you want to block (e.g., numpad keys)
+  const blockedKeys = [
+    { keyCode: 96 },  // Numpad 0
+    { keyCode: 97 },  // Numpad 1
+    { keyCode: 98 },  // Numpad 2
+    { keyCode: 99 },  // Numpad 3
+    { keyCode: 100 }, // Numpad 4
+    { keyCode: 101 }, // Numpad 5
+    { keyCode: 102 }, // Numpad 6
+    { keyCode: 103 }, // Numpad 7
+    { keyCode: 104 }, // Numpad 8
+    { keyCode: 105 }, // Numpad 9
+  ];
+
+  let lastKey = null;
+
+  function handleKeyDown(event) {
+    lastKey = event.keyCode;
+  }
+
+  function handleBeforeInput(event) {
+    if (lastKey !== null && blockedKeys.some(k => k.keyCode === lastKey)) {
+      console.log("Blocked input:", { data: event.data, lastKey });
+      event.preventDefault();
+    }
+  }
+
+  // Add event listeners
+  window.addEventListener("keydown", handleKeyDown, { capture: true });
+  window.addEventListener("beforeinput", handleBeforeInput, { capture: true });
+
+  // Don't forget to cleanup when needed
+  // window.removeEventListener("keydown", handleKeyDown, { capture: true });
+  // window.removeEventListener("beforeinput", handleBeforeInput, { capture: true });
+  ```
