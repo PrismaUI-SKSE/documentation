@@ -502,6 +502,18 @@ void SendComplexData() {
 ```
 
 </TabItem>
+<TabItem label="JavaScript from C++">
+
+```js
+var my_data;    // defined outside function for persistance
+
+window.updateComplexData = (data) => {
+  my_data = data;
+  console.log(my_data.name);      // expect "Dragonborn", as defined in C++ example
+};
+```
+
+</TabItem>
 <TabItem label="JavaScript to C++">
 
 ```js
