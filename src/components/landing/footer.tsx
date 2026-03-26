@@ -21,7 +21,6 @@ export default function Footer() {
       { name: 'Getting Started', href: '/getting-started/introduction/' },
       { name: 'Installation', href: '/getting-started/installation/' },
       { name: 'Basic Usage', href: '/getting-started/basic-usage/' },
-      { name: 'Mods on Prisma', href: '/getting-started/mods-on-prisma/' },
     ],
   };
 

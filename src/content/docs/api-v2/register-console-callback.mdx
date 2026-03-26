@@ -1,0 +1,221 @@
+---
+title: RegisterConsoleCallback
+description: Registers a callback to receive JavaScript console messages from a PrismaView
+sidebar:
+  order: 1
+  badge: NEW
+---
+
+import { Aside, Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Aside type="note" title="Availability">
+Available since **1.4.0** version.
+</Aside>
+
+<Aside type="danger" title="V2 Interface Required">
+This method is only available in the **V2** interface (`IVPrismaUI2`). Users running older versions of PrismaUI (before 1.4.0) will not have the V2 interface available. You **must** check that `RequestPluginAPI<IVPrismaUI2>()` returns a valid pointer before calling this method — otherwise your plugin will crash for users without V2 support.
+</Aside>
+
+## Overview
+
+Registers a callback to receive JavaScript console messages (`console.log`, `console.warn`, `console.error`, etc.) from a `PrismaView`. This is useful for debugging your web UI directly from your SKSE plugin's log.
+
+<Aside type="tip" title="Debugging Aid">
+By capturing console output, you can see JavaScript logs in your SKSE plugin log without needing browser developer tools — making it much easier to debug UI issues in-game.
+</Aside>
+
+## Syntax
+
+```cpp
+void RegisterConsoleCallback(
+    PrismaView view,
+    ConsoleMessageCallback callback
+);
+```
+
+## Types
+
+### `ConsoleMessageLevel`
+
+```cpp
+enum class ConsoleMessageLevel : uint8_t {
+    Log = 0,
+    Warning,
+    Error,
+    Debug,
+    Info
+};
+```
+
+Represents the severity level of a JavaScript console message, matching the standard `console` API methods.
+
+### `ConsoleMessageCallback`
+
+```cpp
+typedef void (*ConsoleMessageCallback)(
+    PrismaView view,
+    ConsoleMessageLevel level,
+    const char* message
+);
+```
+
+The function signature for the console message callback.
+
+## Parameters
+
+### `view` (required)
+- **Type:** `PrismaView`
+- **Description:** The `PrismaView` instance from which to receive console messages
+
+### `callback` (required)
+- **Type:** `ConsoleMessageCallback`
+- **Description:** The C++ callback function that will be called whenever a JavaScript console message is produced in the view
+- **Note:** Pass `nullptr` to unregister a previously registered callback
+
+## Return Value
+
+This method returns `void`.
+
+<Aside type="danger" title="Always Check for nullptr">
+Never call `RegisterConsoleCallback` without first verifying that the V2 interface pointer is not `nullptr`. Users on PrismaUI versions before 1.4.0 will not have V2 support, and calling through a null pointer **will crash the game**.
+</Aside>
+
+## Usage Examples
+
+<Tabs>
+<TabItem label="Safe Usage">
+
+```cpp
+PRISMA_UI_API::IVPrismaUI2* PrismaUIv2 = nullptr;
+
+PrismaUIv2 = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI2>();
+
+// Always guard V2 calls with a null check
+if (PrismaUIv2) {
+    PrismaUIv2->RegisterConsoleCallback(view, [](PrismaView view, ConsoleMessageLevel level, const char* message) {
+        switch (level) {
+        case ConsoleMessageLevel::Log:
+            SKSE::log::info("[JS] {}", message);
+            break;
+        case ConsoleMessageLevel::Warning:
+            SKSE::log::warn("[JS] {}", message);
+            break;
+        case ConsoleMessageLevel::Error:
+            SKSE::log::error("[JS] {}", message);
+            break;
+        case ConsoleMessageLevel::Debug:
+            SKSE::log::debug("[JS] {}", message);
+            break;
+        case ConsoleMessageLevel::Info:
+            SKSE::log::info("[JS] {}", message);
+            break;
+        }
+    });
+}
+```
+
+```js
+// JavaScript — these messages will appear in the SKSE log
+console.log("UI initialized");        // [JS] UI initialized
+console.warn("Missing optional field"); // [JS] Missing optional field
+console.error("Failed to load data");  // [JS] Failed to load data
+```
+
+</TabItem>
+<TabItem label="Error-Only Tracking">
+
+```cpp
+// Only capture errors and warnings
+if (PrismaUIv2) {
+    PrismaUIv2->RegisterConsoleCallback(view, [](PrismaView view, ConsoleMessageLevel level, const char* message) {
+        if (level == ConsoleMessageLevel::Error) {
+            SKSE::log::error("[JS Error] {}", message);
+        } else if (level == ConsoleMessageLevel::Warning) {
+            SKSE::log::warn("[JS Warning] {}", message);
+        }
+    });
+}
+```
+
+</TabItem>
+<TabItem label="Complete Integration">
+
+```cpp
+#include "PrismaUI_API.h"
+
+PRISMA_UI_API::IVPrismaUI1* PrismaUI = nullptr;
+PRISMA_UI_API::IVPrismaUI2* PrismaUIv2 = nullptr;
+static PrismaView view;
+
+static void SKSEMessageHandler(SKSE::MessagingInterface::Message* message)
+{
+    switch (message->type) {
+    case SKSE::MessagingInterface::kDataLoaded:
+        PrismaUI = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI1>();
+        PrismaUIv2 = PRISMA_UI_API::RequestPluginAPI<PRISMA_UI_API::IVPrismaUI2>();
+
+        if (!PrismaUI) {
+            SKSE::log::error("Failed to get PrismaUI API");
+            return;
+        }
+
+        view = PrismaUI->CreateView("MyPlugin/index.html", [](PrismaView view) {
+            SKSE::log::info("View DOM is ready");
+        });
+
+        // Register console callback only if V2 is available
+        if (PrismaUIv2) {
+            PrismaUIv2->RegisterConsoleCallback(view, [](PrismaView view, ConsoleMessageLevel level, const char* message) {
+                switch (level) {
+                case ConsoleMessageLevel::Error:
+                    SKSE::log::error("[JS] {}", message);
+                    break;
+                case ConsoleMessageLevel::Warning:
+                    SKSE::log::warn("[JS] {}", message);
+                    break;
+                default:
+                    SKSE::log::info("[JS] {}", message);
+                    break;
+                }
+            });
+        }
+
+        break;
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Unregister Callback">
+
+```cpp
+// Unregister the callback by passing nullptr
+if (PrismaUIv2) {
+    PrismaUIv2->RegisterConsoleCallback(view, nullptr);
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Best Practices
+
+<Aside type="tip" title="Production Builds">
+Consider filtering console messages by level in release builds. Forwarding all messages (especially `Debug` and `Info`) can add unnecessary log noise outside of development.
+</Aside>
+
+- **Always Check for V2:** Wrap every `RegisterConsoleCallback` call with `if (PrismaUIv2)` — never assume V2 is available
+- **Graceful Degradation:** Your plugin must work correctly even if V2 is not available — treat console callbacks as an optional enhancement
+- **Use for Debugging:** This callback is primarily a development tool — use it to diagnose JavaScript issues without attaching a debugger
+- **Filter by Level:** Only log the severity levels relevant to your needs
+- **Unregister When Done:** Pass `nullptr` to clean up the callback when it's no longer needed
+
+## Common Issues
+
+<Aside type="caution" title="Troubleshooting">
+If your console callback doesn't fire:
+- Verify that `RequestPluginAPI<IVPrismaUI2>()` returned a valid (non-null) pointer
+- Ensure the user has PrismaUI **1.4.0** or later installed
+- Verify you haven't accidentally unregistered the callback by passing `nullptr`
+- Check that your JavaScript code is actually producing console output
+</Aside>

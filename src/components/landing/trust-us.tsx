@@ -49,7 +49,7 @@ export default function TrustUs() {
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                 style={{
-                  backgroundImage: `url(${mod.image})`,
+                  backgroundImage: mod.image ? `url(${mod.image})` : 'none',
                   filter: 'blur(3px) brightness(0.55)',
                 }}
               />

@@ -39,7 +39,7 @@ void InteropCall(
 ### `argument` (required)
 - **Type:** `const char*`
 - **Description:** A string argument to pass to the JavaScript function
-- **Note:** Only accepts string data - use JSON for complex data structures
+- **Note:** Only accepts string data - use a delimiter for complex data structures
 
 ## Return Value
 
@@ -91,37 +91,31 @@ window.setHealthValue = (health) => {
 ```
 
 </TabItem>
-<TabItem label="JSON Data Transfer">
+<TabItem label="Delimited Data Transfer">
 
 ```cpp
-#include <nlohmann/json.hpp>
-using JSON = nlohmann::json;
-
-// Send complex data as JSON string
+// Send complex data as a delimited string
 void SendPlayerStats() {
-    JSON playerStats = {
-        {"health", GetPlayerHealth()},
-        {"magicka", GetPlayerMagicka()},
-        {"stamina", GetPlayerStamina()},
-        {"level", GetPlayerLevel()}
-    };
-    
-    // Convert to string and send via InteropCall
-    std::string jsonStr = playerStats.dump();
-    PrismaUI->InteropCall(view, "updatePlayerStats", jsonStr.c_str());
+    std::string stats = std::to_string(GetPlayerHealth()) + "|"
+                      + std::to_string(GetPlayerMagicka()) + "|"
+                      + std::to_string(GetPlayerStamina()) + "|"
+                      + std::to_string(GetPlayerLevel());
+
+    // Send via InteropCall — no JSON overhead
+    PrismaUI->InteropCall(view, "updatePlayerStats", stats.c_str());
 }
 ```
 
 ```js
-// JavaScript - parse JSON data
-window.updatePlayerStats = (jsonData) => {
-    const stats = JSON.parse(jsonData);
-    
+// JavaScript — split by delimiter (faster than JSON.parse)
+window.updatePlayerStats = (data) => {
+    const [health, magicka, stamina, level] = data.split('|');
+
     // Update UI elements
-    document.getElementById('health').textContent = stats.health;
-    document.getElementById('magicka').textContent = stats.magicka;
-    document.getElementById('stamina').textContent = stats.stamina;
-    document.getElementById('level').textContent = stats.level;
+    document.getElementById('health').textContent = health;
+    document.getElementById('magicka').textContent = magicka;
+    document.getElementById('stamina').textContent = stamina;
+    document.getElementById('level').textContent = level;
 };
 ```
 
@@ -142,11 +136,11 @@ Use `InteropCall` for frequent updates like position tracking or real-time data.
 ## Best Practices
 
 <Aside type="caution" title="String-Only Arguments">
-`InteropCall` only accepts string arguments. For complex data, serialize to JSON or use multiple calls with simple string values.
+`InteropCall` only accepts string arguments. For complex data, use a delimiter (e.g. `|`) and `split()` on the JavaScript side — this is significantly faster than `JSON.parse`.
 </Aside>
 
 - **Performance Critical:** Use for high-frequency calls and real-time updates
-- **String Arguments:** Always pass data as strings - use JSON for complex structures
+- **String Arguments:** Always pass data as strings - use a delimiter for complex structures
 - **No Return Values:** Don't expect return values - use `RegisterJSListener` for bidirectional communication
 - **Function Availability:** Ensure JavaScript functions are globally accessible
 

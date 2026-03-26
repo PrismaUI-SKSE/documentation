@@ -496,7 +496,7 @@ void SendComplexData() {
         }}
     };
 
-    std::string script = "updateComplexData('" + playerData.dump() + "')";
+    std::string script = "updateComplexData(" + playerData.dump() + ")";
     PrismaUI->Invoke(view, script.c_str());
 }
 ```

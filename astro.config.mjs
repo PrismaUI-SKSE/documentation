@@ -4,8 +4,8 @@ import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
-import starlightThemeNext from 'starlight-theme-next';
 import mermaid from 'astro-mermaid';
+import starlightThemeNext from 'starlight-theme-next';
 
 // https://astro.build/config
 export default defineConfig({
@@ -196,8 +196,12 @@ export default defineConfig({
           autogenerate: { directory: 'getting-started' },
         },
         {
-          label: 'API',
+          label: 'API Version 1',
           autogenerate: { directory: 'api' },
+        },
+        {
+          label: 'API Version 2',
+          autogenerate: { directory: 'api-v2' },
         },
         {
           label: 'Inspector API (Beta)',

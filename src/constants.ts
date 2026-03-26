@@ -5,9 +5,24 @@ export const MODS_USING_PRISMA = [
     url: 'https://www.nexusmods.com/skyrimspecialedition/mods/170076',
   },
   {
-    name: 'PMCM',
-    image: '/trust-us-previews/pmcm.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/168551',
+    name: 'CHIM',
+    image: '/trust-us-previews/chim.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/126330',
+  },
+  {
+    name: 'Horde - Follower Management System',
+    image: '/trust-us-previews/horde.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/175589',
+  },
+  {
+    name: 'New Skill Menu - NSM',
+    image: '/trust-us-previews/nsm.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/174085',
+  },
+  {
+    name: 'SkyrimNet',
+    image: '/trust-us-previews/skyrim-net.png',
+    url: 'https://github.com/MinLL/SkyrimNet-GamePlugin',
   },
   {
     name: 'Heart of Magic - Spell Learning System',
@@ -15,14 +30,14 @@ export const MODS_USING_PRISMA = [
     url: 'https://www.nexusmods.com/skyrimspecialedition/mods/171146',
   },
   {
+    name: 'Tailor - An Outfit and Wig Manager',
+    image: '/trust-us-previews/tailor.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/173691',
+  },
+  {
     name: 'True Flasks NG',
     image: '/trust-us-previews/true-flasks-ng.png',
     url: 'https://www.nexusmods.com/skyrimspecialedition/mods/170374',
-  },
-  {
-    name: 'ChatBox',
-    image: '/trust-us-previews/chatbox.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/169429',
   },
   {
     name: 'STB Markers Control',
@@ -35,8 +50,8 @@ export const MODS_USING_PRISMA = [
     url: 'https://skytb.ru/',
   },
   {
-    name: 'TK Dodge Redux',
-    image: '/trust-us-previews/tk-dodge-redux.png',
-    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/160098',
+    name: 'PMCM',
+    image: '/trust-us-previews/pmcm.png',
+    url: 'https://www.nexusmods.com/skyrimspecialedition/mods/168551',
   },
 ] as const;
